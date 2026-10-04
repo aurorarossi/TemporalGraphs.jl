@@ -11,7 +11,7 @@ between users, contacts between people, flights between airports, trades between
 accounts. Information can only travel along **time-respecting paths**, so the
 classical notions of distance and centrality have temporal counterparts.
 
-TemporalGraphs.jl computes
+TemporalGraphs.jl computes:
 
 - **temporal distances and optimal paths**: earliest arrival, latest departure,
   fastest (minimum duration), shortest (minimum sum of transition times) and minimum
@@ -32,9 +32,7 @@ TemporalGraphs.jl computes
   timeline, sequence and snapshot shufflings) and their compositions.
 
 The package was inspired by [TGLib](https://gitlab.com/tgpublic/tglib), the C++/Python
-library of Lutz Oettershagen, and covers its functionality with its own Julia design:
-its own data structures and algorithms, real-valued times and fixes for several issues
-found while comparing the results.
+library of Lutz Oettershagen and Petra Mutzel.
 
 ## Installation
 
@@ -87,12 +85,3 @@ julia> temporal_closeness(g, Fastest())
 ```
 
 Head to [Getting started](tutorial.md) for a tour of the package.
-
-## Citing
-
-TemporalGraphs.jl was inspired by TGLib; if you use it in your research, please also
-cite the paper describing TGLib:
-
-> Lutz Oettershagen and Petra Mutzel. *TGLib: An Open-Source Library for Temporal
-> Graph Analysis.* IEEE International Conference on Data Mining Workshops (ICDMW),
-> 2022. [DOI](https://doi.org/10.1109/ICDMW58026.2022.00160), [arXiv](https://arxiv.org/abs/2209.12587)
