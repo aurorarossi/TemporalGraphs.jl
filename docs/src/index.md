@@ -11,6 +11,10 @@ between users, contacts between people, flights between airports, trades between
 accounts. Information can only travel along **time-respecting paths**, so the
 classical notions of distance and centrality have temporal counterparts.
 
+The **node set is fixed**: a temporal graph has the same nodes `1:n` during its whole
+time interval, and only the edges change over time. A node without edges at some time
+(for example before it joins the network or after it leaves it) is simply isolated see [Nodes over time](@ref).
+
 TemporalGraphs.jl computes:
 
 - **temporal distances and optimal paths**: earliest arrival, latest departure,

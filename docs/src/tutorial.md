@@ -58,6 +58,22 @@ julia> edges(g)                          # sorted by (t, tt, u, v)
 The time interval defaults to `(earliest departure, latest arrival)`; you can pass
 another one as third argument.
 
+### Nodes over time
+
+The nodes `1:n` exist during the whole time interval: only the edges depend on time.
+There is no separate notion of a node joining or leaving the network. A node that has
+no edges at some time is *isolated* then: it is still a node of the graph, but it
+cannot reach or be reached by the others at that time. To model a node that is active
+only during a period, give it edges only during that period.
+
+Results over all nodes therefore include the inactive ones: a graph with a node that
+never has an edge is not temporally connected ([`is_temporally_connected`](@ref)),
+isolated nodes form components of size 1, and every snapshot ([`snapshots`](@ref))
+has all `n` nodes. The loaders ([`load_ordered_edge_list`](@ref),
+[`load_dataset`](@ref)) number only the nodes that appear in some edge. To study a
+subset of the nodes, for example those active in a time window, build a new graph
+from the edges between them.
+
 ### From files
 
 [`load_ordered_edge_list`](@ref) reads text files with one edge `u v t [tt]` per

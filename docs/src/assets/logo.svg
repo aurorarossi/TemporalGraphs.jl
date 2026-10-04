@@ -27,25 +27,27 @@
   <!-- snapshots -->
   <use href="#snapshots" fill="none" stroke="#FFFFFF" stroke-width="4.4" mask="url(#outside)"/>
   <use href="#snapshots" fill="none" stroke="#1A1A1A" stroke-width="2.4"/>
-  <!-- each node through time, while it exists -->
+  <!-- each node through time: the nodes are the same in every snapshot -->
   <g stroke="#8C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
     <line x1="33" y1="62" x2="225" y2="62"/>
     <line x1="57.2" y1="44.4" x2="249.2" y2="44.4"/>
-    <line x1="35.2" y1="121.4" x2="131.2" y2="121.4"/>
-    <line x1="152.3" y1="99.8" x2="248.3" y2="99.8"/>
+    <line x1="35.2" y1="121.4" x2="227.2" y2="121.4"/>
+    <line x1="56.3" y1="99.8" x2="248.3" y2="99.8"/>
   </g>
   <!-- edges of each snapshot, in a grey readable on any background -->
   <use href="#edges" stroke="#707070" stroke-width="3.5"/>
-  <!-- nodes in the Julia colors -->
+  <!-- nodes in the Julia colors (isolated in a snapshot when they have no edges there) -->
   <circle cx="33" cy="62" r="8.5" fill="#4063D8"/>
   <circle cx="57.2" cy="44.4" r="8.5" fill="#CB3C33"/>
   <circle cx="35.2" cy="121.4" r="8.5" fill="#389826"/>
+  <circle cx="56.3" cy="99.8" r="8.5" fill="#9558B2"/>
   <circle cx="129" cy="62" r="8.5" fill="#4063D8"/>
   <circle cx="153.2" cy="44.4" r="8.5" fill="#CB3C33"/>
   <circle cx="131.2" cy="121.4" r="8.5" fill="#389826"/>
   <circle cx="152.3" cy="99.8" r="8.5" fill="#9558B2"/>
   <circle cx="225" cy="62" r="8.5" fill="#4063D8"/>
   <circle cx="249.2" cy="44.4" r="8.5" fill="#CB3C33"/>
+  <circle cx="227.2" cy="121.4" r="8.5" fill="#389826"/>
   <circle cx="248.3" cy="99.8" r="8.5" fill="#9558B2"/>
   <!-- time arrow -->
   <use href="#arrow" fill="none" stroke="#FFFFFF" stroke-width="4.4" mask="url(#outside)"/>

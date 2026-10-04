@@ -32,8 +32,10 @@ julia> out_edges(il, 1)
 
 ## Edge stream
 
-[`OrderedEdgeList`](@ref) keeps the edges sorted by `(t, tt, u, v)` in one vector. It
-also stores the ids that the nodes had in the input file ([`original_id`](@ref),
+[`OrderedEdgeList`](@ref) keeps the edges sorted by time in one vector: by
+`(t, tt, u, v)`, or in the given order if they were already sorted by time (with the
+edges of transition time 0 first at every time stamp). The nodes are `1:n` at every
+time (see [Nodes over time](@ref)). It also stores the ids that the nodes had in the input file ([`original_id`](@ref),
 [`node_map`](@ref)). This is the representation returned by the loaders.
 
 ## Incident lists

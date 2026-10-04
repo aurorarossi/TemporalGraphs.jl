@@ -8,6 +8,8 @@ connectivity, flows and spanners, temporal motifs, isomorphisms and randomized m
 Public temporal networks (SNAP, SocioPatterns) can be downloaded
 directly, the temporal datasets of MLDatasets.jl can be loaded as temporal graphs, and
 temporal graphs can be converted to GNNGraphs for GraphNeuralNetworks.jl.
+The node set is fixed: only the edges change over time, and a node without edges at
+some time is isolated then.
 
 TemporalGraphs.jl is inspired by [TGLib](https://gitlab.com/tgpublic/tglib) (C++/Python,
 Lutz Oettershagen and Petra Mutzel) and was built with the help of the Claude Opus 5.5 model.
