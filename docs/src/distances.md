@@ -1,0 +1,100 @@
+# Temporal paths and distances
+
+## Temporal paths
+
+A **temporal path** (or journey) from `s` to `z` is a sequence of temporal edges
+``e_1 = (s, v_1, t_1, λ_1), e_2 = (v_1, v_2, t_2, λ_2), \dots, e_k = (v_{k-1}, z, t_k, λ_k)``
+in which every edge starts after the previous one has arrived:
+
+```math
+t_{i+1} \geq t_i + λ_i \quad \text{for } 1 \leq i < k.
+```
+
+It departs at ``t_1``, arrives at ``t_k + λ_k``, has **duration**
+``t_k + λ_k - t_1``, **length** ``k`` and **transition time** ``\sum_i λ_i``.
+
+Waiting at a node is allowed for any amount of time. Edges with transition time 0
+are supported: several of them can be traversed at the same time stamp.
+
+## Distance types
+
+The distance type is chosen with a singleton [`DistanceType`](@ref), which lets the
+compiler generate a specialized algorithm for each of them:
+
+| Distance type | Optimal path | Value for node `v` | Function |
+|---|---|---|---|
+| [`EarliestArrival`](@ref) | arrives first | arrival time | [`earliest_arrival_times`](@ref) |
+| [`LatestDeparture`](@ref) | leaves the source last | departure time | [`latest_departure_times`](@ref) |
+| [`Fastest`](@ref) | shortest duration | duration | [`minimum_durations`](@ref) |
+| [`MinimumTransitionTimes`](@ref) | smallest sum of transition times ("shortest") | sum of transition times | [`minimum_transition_times`](@ref) |
+| [`MinimumHops`](@ref) | fewest edges | number of edges | [`minimum_hops`](@ref) |
+
+For the source itself the value is 0 (for latest departure the end of the time
+interval). Nodes that cannot be reached get `typemax` of the element type (for
+latest departure `typemin`). Minimum hops are always counted as `Int`; all other
+values have the time type of the graph.
+
+## Time windows
+
+Every algorithm takes an optional time interval `(a, b)`, by default the interval
+spanned by the graph. Only edges that depart and arrive inside the window are used,
+i.e. edges with `a ≤ t` and `t + tt ≤ b`:
+
+```jldoctest
+julia> using TemporalGraphs
+
+julia> g = OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 4, 1), (1, 3, 6, 1)]);
+
+julia> earliest_arrival_times(g, 1)
+3-element Vector{Int64}:
+ 0
+ 2
+ 5
+
+julia> earliest_arrival_times(g, 1, (0, 4))       # (2 3 4 1) arrives at 5 > 4
+3-element Vector{Int64}:
+                   0
+                   2
+ 9223372036854775807
+```
+
+## Algorithms
+
+| Representation | Earliest arrival | Fastest, latest departure, shortest, minimum hops |
+|---|---|---|
+| [`OrderedEdgeList`](@ref) | one scan over the edges | one scan, Pareto fronts of labels per node |
+| [`IncidentLists`](@ref) | Dijkstra's algorithm | label setting (Dijkstra on labels) |
+| [`TRSGraph`](@ref) | depth-first search | depth-first search (fastest), Dijkstra (shortest, hops) |
+
+The edge stream algorithms (Wu et al., 2016) are usually the fastest. They keep for
+every node the non-dominated pairs *(arrival time, cost)* in a sorted vector; since
+the edges are scanned in chronological order, labels older than the one used by the
+last query are discarded. Edges with transition time 0 at the same time stamp are
+scanned repeatedly until nothing changes, so they are handled correctly (a single
+pass, as in TGLib, misses paths through several such edges).
+
+The label-setting algorithms on incident lists keep the same Pareto fronts, search
+them with binary search and stop as soon as every node is settled. They also return
+the optimal paths, see [`minimum_duration_path`](@ref) and the other path functions.
+
+## Paths
+
+| Distance type | Function |
+|---|---|
+| earliest arrival | [`earliest_arrival_path`](@ref) |
+| fastest | [`minimum_duration_path`](@ref) |
+| shortest | [`minimum_transition_time_path`](@ref) |
+| minimum hops | [`minimum_hops_path`](@ref) |
+
+Each returns the vector of edges of one optimal path from `s` to `target`, or an
+empty vector if there is none.
+
+## Reachability
+
+[`number_of_reachable_nodes`](@ref) counts the nodes reachable from a source, the
+source included.
+
+## References
+
+- H. Wu, J. Cheng, Y. Ke, S. Huang, Y. Huang, and H. Wu. *Efficient algorithms for temporal path computation.* IEEE Transactions on Knowledge and Data Engineering 28(11), 2016. [DOI](https://doi.org/10.1109/TKDE.2016.2594065)
+- L. Oettershagen and P. Mutzel. *TGLib: an open-source library for temporal graph analysis.* IEEE International Conference on Data Mining Workshops (ICDMW), 2022. [DOI](https://doi.org/10.1109/ICDMW58026.2022.00160), [arXiv](https://arxiv.org/abs/2209.12587)
