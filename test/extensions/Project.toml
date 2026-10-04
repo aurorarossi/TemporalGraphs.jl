@@ -1,0 +1,7 @@
+[deps]
+MLDatasets = "eb30cadb-4394-5ae3-aed4-317e484a6458"
+TemporalGraphs = "82aa5c3e-d57f-4b0f-ac00-57e9d2a8eea2"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[sources]
+TemporalGraphs = {path = "../.."}
