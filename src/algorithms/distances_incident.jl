@@ -46,9 +46,7 @@ distance_workspace(g::IncidentLists{V,T}, ::EarliestArrival) where {V,T} =
 
 function _reset!(ws::IncidentListsWorkspace)
     _reset!(ws.fronts)
-    for x in (ws.node, ws.arr, ws.cost, ws.parent, ws.edge, ws.deleted)
-        empty!(x)
-    end
+    foreach(empty!, (ws.node, ws.arr, ws.cost, ws.parent, ws.edge, ws.deleted))  # unrolled
     fill!(ws.visited, false)
     empty!(ws.heap)
     return ws

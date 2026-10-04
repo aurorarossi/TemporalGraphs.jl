@@ -161,9 +161,16 @@ function _check_edges(n, es)
     return nothing
 end
 
-# time-sorted copy of `es` (sorted by (t, tt, u, v) if it was not sorted by time)
+# time-sorted copy of `es`: sorted by (t, tt, u, v) if it was not sorted by time.
+# Otherwise the order is kept, except that the edges with transition time 0 are moved
+# (stably) to the beginning of their time stamp, which the stream algorithms rely on.
+_zero_first(e::TemporalEdge) = (e.t, !iszero(e.tt))
 function _chronological(::Type{E}, es) where {E}
     v = collect(E, es)
-    issorted(v; by=e -> e.t) || sort!(v)
+    if !issorted(v; by=e -> e.t)
+        sort!(v)
+    elseif !issorted(v; by=_zero_first)
+        sort!(v; by=_zero_first, alg=Base.Sort.DEFAULT_STABLE)
+    end
     return v
 end

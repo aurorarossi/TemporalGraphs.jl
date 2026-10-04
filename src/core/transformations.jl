@@ -64,6 +64,7 @@ function scale_timestamps(g::OrderedEdgeList{V,T}, factor::Real) where {V,T}
     return _rebuild(g, unique!(sort!(es)))
 end
 
+_scale(t::T, f::Integer) where {T<:Integer} = convert(T, t * f)
 _scale(t::T, f) where {T<:Integer} = round(T, t * f, RoundNearestTiesAway)
 _scale(t::T, f) where {T<:AbstractFloat} = T(t * f)
 

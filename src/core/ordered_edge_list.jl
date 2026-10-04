@@ -6,8 +6,10 @@ edges (the "edge stream" representation). This is the main representation: most
 algorithms run a single scan over the contiguous edge vector.
 
 `edges` is a vector of [`TemporalEdge`](@ref)s or of tuples `(u, v, t, tt)`. It is
-copied, and sorted by `(t, tt, u, v)` if it is not sorted by time. `ti` is the time
-interval spanned by the graph and defaults to `(minimum t, maximum t + tt)`.
+copied, and sorted by `(t, tt, u, v)` if it is not sorted by time; otherwise its order
+is kept, except that the edges with transition time 0 come first among those with the
+same time stamp. `ti` is the time interval spanned by the graph and defaults to
+`(minimum t, maximum t + tt)`.
 `original_ids[i]` is the id that node `i` had in the input file (see
 [`load_ordered_edge_list`](@ref)).
 """

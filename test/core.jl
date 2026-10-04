@@ -15,6 +15,12 @@
     @test_throws ArgumentError OrderedEdgeList(2, [TemporalEdge(1, 3, 1, 1)])
     g = OrderedEdgeList(3, [TemporalEdge(1, 2, 5, 1), TemporalEdge(2, 3, 1, 1)])
     @test issorted(edges(g)) && time_interval(g) == (1, 6)
+    # input sorted by time is kept, but transition time 0 comes first at every time stamp
+    g = OrderedEdgeList(7, [(6, 1, 1, 1), (1, 7, 1, 3), (7, 6, 1, 0), (2, 3, 2, 1), (3, 4, 2, 0)])
+    @test edges(g) == [TemporalEdge(7, 6, 1, 0), TemporalEdge(6, 1, 1, 1), TemporalEdge(1, 7, 1, 3),
+                       TemporalEdge(3, 4, 2, 0), TemporalEdge(2, 3, 2, 1)]
+    @test earliest_arrival_times(g, 7)[1] == 2
+    @test scale_timestamps(g, 3) == scale_timestamps(g, 3.0)
 end
 
 @testset "input and output" begin
