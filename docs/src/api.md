@@ -66,6 +66,14 @@ save_ordered_edge_list
 OrderedEdgeList(::Any)
 ```
 
+## Drawing
+
+```@docs
+draw_graph
+draw_timelines
+TemporalGraphDrawing
+```
+
 ## Transformations
 
 ```@docs

@@ -249,6 +249,27 @@ max. temporal out-degree: 3
 
 See [Centralities and statistics](centralities.md) for all measures.
 
+## Drawing
+
+[`draw_graph`](@ref) draws the static graph, with every edge labelled by its
+`(t, tt)`, and [`draw_timelines`](@ref) draws one timeline per node, with every edge
+going from `u` at time `t` to `v` at time `t + tt`:
+
+```@example drawing
+using TemporalGraphs
+g = OrderedEdgeList(4, [(1, 4, 1, 5), (1, 2, 2, 1), (1, 2, 5, 2), (3, 2, 6, 1),
+                        (4, 3, 6, 2), (2, 4, 7, 2), (4, 3, 8, 1)])
+draw_graph(g)
+```
+
+```@example drawing
+draw_timelines(g; order=[1, 2, 4, 3])   # the timelines from top to bottom
+```
+
+Both return a [`TemporalGraphDrawing`](@ref), shown as an image by notebooks, the VS
+Code plot pane and this documentation; `write("graph.svg", draw_graph(g))` saves it.
+They draw every edge, so they are meant for small graphs.
+
 ## Next steps
 
 - [Graph representations](representations.md): when to convert to incident lists or to the

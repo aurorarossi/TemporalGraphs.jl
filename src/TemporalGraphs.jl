@@ -50,6 +50,8 @@ export
     # statistics and IO
     TemporalGraphStatistics, get_statistics,
     load_ordered_edge_list, load_incident_lists, load_trs_graph, save_ordered_edge_list,
+    # drawing
+    TemporalGraphDrawing, draw_graph, draw_timelines,
     # distances and paths
     earliest_arrival_times, latest_departure_times, minimum_durations, minimum_hops,
     minimum_transition_times, temporal_distances, temporal_distances!, distance_workspace,
@@ -91,6 +93,7 @@ include("core/transformations.jl")
 include("core/statistics.jl")
 include("core/snapshots.jl")
 include("io.jl")
+include("drawing.jl")
 
 include("util/heap.jl")
 include("util/topk.jl")
