@@ -1,5 +1,53 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl</title><meta name="title" content="Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl"/><meta property="og:title" content="Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl"/><meta property="twitter:title" content="Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl"/><meta name="description" content="Documentation for TemporalGraphs.jl."/><meta property="og:description" content="Documentation for TemporalGraphs.jl."/><meta property="twitter:description" content="Documentation for TemporalGraphs.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.svg" alt="TemporalGraphs.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">TemporalGraphs.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../tutorial/">Getting started</a></li><li><a class="tocitem" href="../distances/">Temporal paths and distances</a></li><li><a class="tocitem" href="../centralities/">Centralities and statistics</a></li><li><a class="tocitem" href="../motifs/">Motifs and reference models</a></li><li class="is-active"><a class="tocitem" href>Connectivity, flows, spanners and isomorphisms</a><ul class="internal"><li><a class="tocitem" href="#Reachability-and-temporal-components"><span>Reachability and temporal components</span></a></li><li><a class="tocitem" href="#Dissemination-times"><span>Dissemination times</span></a></li><li><a class="tocitem" href="#More-temporal-components"><span>More temporal components</span></a></li><li><a class="tocitem" href="#Static-expansions"><span>Static expansions</span></a></li><li><a class="tocitem" href="#Waiting-constraints:-restless-walks-and-paths"><span>Waiting constraints: restless walks and paths</span></a></li><li><a class="tocitem" href="#Flows,-cuts-and-disjoint-paths"><span>Flows, cuts and disjoint paths</span></a></li><li><a class="tocitem" href="#Spanning-trees-and-spanners"><span>Spanning trees and spanners</span></a></li><li><a class="tocitem" href="#Temporal-graph-isomorphisms"><span>Temporal graph isomorphisms</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li><li><a class="tocitem" href="../representations/">Graph representations</a></li><li><a class="tocitem" href="../datasets/">Datasets and machine learning</a></li><li><a class="tocitem" href="../performance/">Performance tips</a></li><li><a class="tocitem" href="../api/">API reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Connectivity, flows, spanners and isomorphisms</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Connectivity, flows, spanners and isomorphisms</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/aurorarossi/TemporalGraphs.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/aurorarossi/TemporalGraphs.jl/blob/main/docs/src/theory.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Connectivity,-flows,-spanners-and-isomorphisms"><a class="docs-heading-anchor" href="#Connectivity,-flows,-spanners-and-isomorphisms">Connectivity, flows, spanners and isomorphisms</a><a id="Connectivity,-flows,-spanners-and-isomorphisms-1"></a><a class="docs-heading-anchor-permalink" href="#Connectivity,-flows,-spanners-and-isomorphisms" title="Permalink"></a></h1><p>This page covers classical problems of temporal graph theory. In temporal graphs, several notions that are easy for static graphs behave differently:</p><ul><li>reachability is not transitive;</li><li>connected components can overlap;</li><li>Menger&#39;s theorem fails for vertex-disjoint paths;</li><li>spanning trees and spanners can be hard to compute.</li></ul><p>For each function, the docstring gives the complexity of the problem it solves. Some problems are NP-hard; for those the package provides exact exponential-time algorithms that are practical on small and medium instances, or approximation algorithms. Every function was validated against brute-force enumeration and against the examples of the original papers.</p><p>Paths follow the conventions of the package:</p><ul><li>an edge <code>(u, v, t, tt)</code> can be followed by an edge leaving <code>v</code> at time <code>t + tt</code> or later;</li><li>positive transition times give <em>strict</em> paths;</li><li>transition times 0 give <em>non-strict</em> paths, which can use several edges with the same time stamp.</li></ul><h2 id="Reachability-and-temporal-components"><a class="docs-heading-anchor" href="#Reachability-and-temporal-components">Reachability and temporal components</a><a id="Reachability-and-temporal-components-1"></a><a class="docs-heading-anchor-permalink" href="#Reachability-and-temporal-components" title="Permalink"></a></h2><p><a href="../api/#TemporalGraphs.temporal_reachability"><code>temporal_reachability</code></a> computes the reachability matrix between all pairs of nodes. It processes 64 sources at a time with bitsets, in one scan of the edges per block of sources, so it is much faster than one search per source. <a href="../api/#TemporalGraphs.is_temporally_connected"><code>is_temporally_connected</code></a> tests whether every node reaches every other node.</p><p>A <em>temporal connected component</em> (Bhadra and Ferreira, 2003) is a maximal set of nodes that reach each other.</p><ul><li><strong>Overlapping components.</strong> Since reachability is not transitive, components can overlap, and finding the largest one is NP-hard.</li><li><strong>Open components.</strong> These are the maximal cliques of the graph that joins the pairs of nodes reaching each other (Costa, Lopes, Marino and Silva, 2023); <a href="../api/#TemporalGraphs.temporal_connected_components"><code>temporal_connected_components</code></a> enumerates them.</li><li><strong>Closed components.</strong> In a <em>closed</em> component the paths must also stay inside the set. Even deciding whether a set is a closed component is NP-hard. <a href="../api/#TemporalGraphs.largest_temporal_connected_component"><code>largest_temporal_connected_component</code></a> finds a largest closed component exactly, by branching inside the open components.</li><li><strong>Unilateral components.</strong> With <code>unilateral = true</code>, it is enough that one node of every pair reaches the other.</li></ul><pre><code class="language-julia-repl hljs">julia&gt; using TemporalGraphs
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl</title><meta name="title" content="Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl"/><meta property="og:title" content="Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl"/><meta property="twitter:title" content="Connectivity, flows, spanners and isomorphisms · TemporalGraphs.jl"/><meta name="description" content="Documentation for TemporalGraphs.jl."/><meta property="og:description" content="Documentation for TemporalGraphs.jl."/><meta property="twitter:description" content="Documentation for TemporalGraphs.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.svg" alt="TemporalGraphs.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">TemporalGraphs.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../tutorial/">Getting started</a></li><li><a class="tocitem" href="../distances/">Temporal paths and distances</a></li><li><a class="tocitem" href="../centralities/">Centralities and statistics</a></li><li><a class="tocitem" href="../motifs/">Motifs and reference models</a></li><li class="is-active"><a class="tocitem" href>Connectivity, flows, spanners and isomorphisms</a><ul class="internal"><li><a class="tocitem" href="#Reachability-and-temporal-components"><span>Reachability and temporal components</span></a></li><li><a class="tocitem" href="#Dissemination-times"><span>Dissemination times</span></a></li><li><a class="tocitem" href="#More-temporal-components"><span>More temporal components</span></a></li><li><a class="tocitem" href="#Static-expansions"><span>Static expansions</span></a></li><li><a class="tocitem" href="#Waiting-constraints:-restless-walks-and-paths"><span>Waiting constraints: restless walks and paths</span></a></li><li><a class="tocitem" href="#Flows,-cuts-and-disjoint-paths"><span>Flows, cuts and disjoint paths</span></a></li><li><a class="tocitem" href="#Spanning-trees-and-spanners"><span>Spanning trees and spanners</span></a></li><li><a class="tocitem" href="#Temporal-graph-isomorphisms"><span>Temporal graph isomorphisms</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li><li><a class="tocitem" href="../representations/">Graph representations</a></li><li><a class="tocitem" href="../datasets/">Datasets and machine learning</a></li><li><a class="tocitem" href="../performance/">Performance tips</a></li><li><a class="tocitem" href="../api/">API reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Connectivity, flows, spanners and isomorphisms</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Connectivity, flows, spanners and isomorphisms</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/aurorarossi/TemporalGraphs.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/aurorarossi/TemporalGraphs.jl/blob/main/docs/src/theory.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Connectivity,-flows,-spanners-and-isomorphisms"><a class="docs-heading-anchor" href="#Connectivity,-flows,-spanners-and-isomorphisms">Connectivity, flows, spanners and isomorphisms</a><a id="Connectivity,-flows,-spanners-and-isomorphisms-1"></a><a class="docs-heading-anchor-permalink" href="#Connectivity,-flows,-spanners-and-isomorphisms" title="Permalink"></a></h1><p>This page covers classical problems of temporal graph theory. In temporal graphs, several notions that are easy for static graphs behave differently:</p><ul><li>reachability is not transitive;</li><li>connected components can overlap;</li><li>Menger&#39;s theorem fails for vertex-disjoint paths;</li><li>spanning trees and spanners can be hard to compute.</li></ul><p>For each function, the docstring gives the complexity of the problem it solves. Some problems are NP-hard; for those the package provides exact exponential-time algorithms that are practical on small and medium instances, or approximation algorithms. Every function was validated against brute-force enumeration and against the examples of the original papers.</p><p>Paths follow the conventions of the package:</p><ul><li>an edge <code>(u, v, t, tt)</code> can be followed by an edge leaving <code>v</code> at time <code>t + tt</code> or later;</li><li>positive transition times give <em>strict</em> paths;</li><li>transition times 0 give <em>non-strict</em> paths, which can use several edges with the same time stamp.</li></ul><h2 id="Reachability-and-temporal-components"><a class="docs-heading-anchor" href="#Reachability-and-temporal-components">Reachability and temporal components</a><a id="Reachability-and-temporal-components-1"></a><a class="docs-heading-anchor-permalink" href="#Reachability-and-temporal-components" title="Permalink"></a></h2><p><a href="../api/#TemporalGraphs.temporal_reachability"><code>temporal_reachability</code></a> computes the reachability matrix between all pairs of nodes. It processes 64 sources at a time with bitsets, in one scan of the edges per block of sources, so it is much faster than one search per source. <a href="../api/#TemporalGraphs.is_temporally_connected"><code>is_temporally_connected</code></a> tests whether every node reaches every other node.</p><p>A <em>temporal connected component</em> (Bhadra and Ferreira, 2003) is a maximal set of nodes that reach each other.</p><ul><li><strong>Overlapping components.</strong> Since reachability is not transitive, components can overlap, and finding the largest one is NP-hard.</li><li><strong>Open components.</strong> These are the maximal cliques of the graph that joins the pairs of nodes reaching each other (Costa, Lopes, Marino and Silva, 2023); <a href="../api/#TemporalGraphs.temporal_connected_components"><code>temporal_connected_components</code></a> enumerates them.</li><li><strong>Closed components.</strong> In a <em>closed</em> component the paths must also stay inside the set. Even deciding whether a set is a closed component is NP-hard. <a href="../api/#TemporalGraphs.largest_temporal_connected_component"><code>largest_temporal_connected_component</code></a> finds a largest closed component exactly, by branching inside the open components.</li><li><strong>Unilateral components.</strong> With <code>unilateral = true</code>, it is enough that one node of every pair reaches the other.</li></ul><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" width="600" height="310">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="260"/>
+    <line x1="233.3" y1="10" x2="233.3" y2="260"/>
+    <line x1="391.7" y1="10" x2="391.7" y2="260"/>
+    <line x1="550" y1="10" x2="550" y2="260"/>
+  </g>
+  <path d="M45,280 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="233.3" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="391.7" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="550" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="578" y="280" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M75,35 L75,165"/>
+    <path d="M233.3,165 L233.3,105"/>
+    <path d="M391.7,105 L391.7,235"/>
+    <path d="M550,235 L550,35"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="75" cy="170" r="5" fill="%23389826"/>
+  <circle cx="233.3" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="233.3" cy="170" r="5" fill="%23389826"/>
+  <circle cx="391.7" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="391.7" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="550" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="550" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+</svg>
+'/><pre><code class="language-julia-repl hljs">julia&gt; using TemporalGraphs
 
 julia&gt; g = OrderedEdgeList(4, [(1, 3, 1, 0), (3, 2, 2, 0), (2, 4, 3, 0), (4, 1, 4, 0)]);
 
@@ -11,16 +59,122 @@ julia&gt; temporal_connected_components(g)   # overlapping components
 
 julia&gt; largest_temporal_connected_component(g; closed = true)   # 1 and 2 only meet through 3 and 4
 1-element Vector{Int64}:
- 1</code></pre><h2 id="Dissemination-times"><a class="docs-heading-anchor" href="#Dissemination-times">Dissemination times</a><a id="Dissemination-times-1"></a><a class="docs-heading-anchor-permalink" href="#Dissemination-times" title="Permalink"></a></h2><p>If every node forwards what it knows on every edge it can use (<em>flooding</em>), then:</p><ul><li>information starting at <code>s</code> at the beginning of the time interval reaches everybody after the <a href="../api/#TemporalGraphs.temporal_flooding_time"><code>temporal_flooding_time</code></a> of <code>s</code>;</li><li>everybody knows everything after the <a href="../api/#TemporalGraphs.temporal_gossip_time"><code>temporal_gossip_time</code></a>, the largest flooding time.</li></ul><p>Both are computed from <a href="../api/#TemporalGraphs.earliest_arrival_matrix"><code>earliest_arrival_matrix</code></a>, the earliest arrival times between all pairs of nodes. It uses the bitset scan of the reachability matrix and records when every source first reaches every node, in <code>O(m n / 64 + n²)</code> time.</p><pre><code class="language-julia-repl hljs">julia&gt; g = OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 1, 4, 1), (1, 2, 6, 1)]);
+ 1</code></pre><h2 id="Dissemination-times"><a class="docs-heading-anchor" href="#Dissemination-times">Dissemination times</a><a id="Dissemination-times-1"></a><a class="docs-heading-anchor-permalink" href="#Dissemination-times" title="Permalink"></a></h2><p>If every node forwards what it knows on every edge it can use (<em>flooding</em>), then:</p><ul><li>information starting at <code>s</code> at the beginning of the time interval reaches everybody after the <a href="../api/#TemporalGraphs.temporal_flooding_time"><code>temporal_flooding_time</code></a> of <code>s</code>;</li><li>everybody knows everything after the <a href="../api/#TemporalGraphs.temporal_gossip_time"><code>temporal_gossip_time</code></a>, the largest flooding time.</li></ul><p>Both are computed from <a href="../api/#TemporalGraphs.earliest_arrival_matrix"><code>earliest_arrival_matrix</code></a>, the earliest arrival times between all pairs of nodes. It uses the bitset scan of the reachability matrix and records when every source first reaches every node, in <code>O(m n / 64 + n²)</code> time.</p><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="600" height="240">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="190"/>
+    <line x1="154.2" y1="10" x2="154.2" y2="190"/>
+    <line x1="233.3" y1="10" x2="233.3" y2="190"/>
+    <line x1="312.5" y1="10" x2="312.5" y2="190"/>
+    <line x1="391.7" y1="10" x2="391.7" y2="190"/>
+    <line x1="470.8" y1="10" x2="470.8" y2="190"/>
+    <line x1="550" y1="10" x2="550" y2="190"/>
+  </g>
+  <path d="M45,210 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="230" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="154.2" y="230" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="233.3" y="230" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="312.5" y="230" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="391.7" y="230" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">5</text>
+  <text x="470.8" y="230" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">6</text>
+  <text x="550" y="230" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">7</text>
+  <text x="578" y="210" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M78.7,33.3 L150.4,96.7"/>
+    <path d="M157.9,103.3 L229.6,166.7"/>
+    <path d="M315,165.6 L389.2,34.4"/>
+    <path d="M474.6,33.3 L546.3,96.7"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="154.2" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="233.3" cy="170" r="5" fill="%23389826"/>
+  <circle cx="312.5" cy="170" r="5" fill="%23389826"/>
+  <circle cx="391.7" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="470.8" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="550" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+</svg>
+'/><pre><code class="language-julia-repl hljs">julia&gt; g = OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 1, 4, 1), (1, 2, 6, 1)]);
 
 julia&gt; earliest_arrival_matrix(g)
-3×3 Matrix{Int64}:
+3×3 TemporalDistances{Int64}:
  0  2  3
  5  0  3
  5  7  0
 
 julia&gt; temporal_flooding_times(g), temporal_gossip_time(g)   # the interval starts at time 1
-([2, 4, 6], 6)</code></pre><h2 id="More-temporal-components"><a class="docs-heading-anchor" href="#More-temporal-components">More temporal components</a><a id="More-temporal-components-1"></a><a class="docs-heading-anchor-permalink" href="#More-temporal-components" title="Permalink"></a></h2><p>The Temporal Graph Wiki lists several other component notions; these are computed in polynomial time.</p><ul><li><strong>Source and sink components.</strong> <a href="../api/#TemporalGraphs.source_component"><code>source_component</code></a><code>(g, S)</code> is the largest set of nodes reached by every node of <code>S</code>; <a href="../api/#TemporalGraphs.sink_component"><code>sink_component</code></a> is the largest set of nodes that reach every node of <code>S</code>. With <code>closed = true</code> the paths must stay inside the set. Unlike for temporal connected components, the largest set is unique in both cases. The closed one is the greatest fixed point of restricting the set to the subgraph it induces.</li><li><strong>Window components.</strong> <a href="../api/#TemporalGraphs.window_components"><code>window_components</code></a> returns the connected components of the static graph of the edges in a time window, ignoring their order.</li><li><strong>Persistent components</strong> (Vernet, Pigné and Sanlaville, 2023). <a href="../api/#TemporalGraphs.persistent_components"><code>persistent_components</code></a> finds the sets that are a connected component of every snapshot during an interval of consecutive time steps, with the interval as long as possible. It takes one sweep over the snapshots.</li><li><strong>T-interval connected components</strong> (after Kuhn, Lynch and Oshman, 2010). <a href="../api/#TemporalGraphs.interval_connected_components"><code>interval_connected_components</code></a> finds the maximal sets that stay connected through edges present in all <code>T</code> consecutive snapshots of every window. These sets partition the nodes, and are found by refining a partition until it no longer changes.</li></ul><p>The time steps are the grid of the time interval with the resolution of the time stamps:</p><pre><code class="language-julia-repl hljs">julia&gt; c = OrderedEdgeList(4, [(1, 2, 0, 0), (1, 2, 1, 0), (2, 3, 1, 0), (1, 2, 2, 0), (2, 3, 2, 0), (3, 4, 5, 0)]);
+([2, 4, 6], 6)</code></pre><h2 id="More-temporal-components"><a class="docs-heading-anchor" href="#More-temporal-components">More temporal components</a><a id="More-temporal-components-1"></a><a class="docs-heading-anchor-permalink" href="#More-temporal-components" title="Permalink"></a></h2><p>The Temporal Graph Wiki lists several other component notions; these are computed in polynomial time.</p><ul><li><strong>Source and sink components.</strong> <a href="../api/#TemporalGraphs.source_component"><code>source_component</code></a><code>(g, S)</code> is the largest set of nodes reached by every node of <code>S</code>; <a href="../api/#TemporalGraphs.sink_component"><code>sink_component</code></a> is the largest set of nodes that reach every node of <code>S</code>. With <code>closed = true</code> the paths must stay inside the set. Unlike for temporal connected components, the largest set is unique in both cases. The closed one is the greatest fixed point of restricting the set to the subgraph it induces.</li><li><strong>Window components.</strong> <a href="../api/#TemporalGraphs.window_components"><code>window_components</code></a> returns the connected components of the static graph of the edges in a time window, ignoring their order.</li><li><strong>Persistent components</strong> (Vernet, Pigné and Sanlaville, 2023). <a href="../api/#TemporalGraphs.persistent_components"><code>persistent_components</code></a> finds the sets that are a connected component of every snapshot during an interval of consecutive time steps, with the interval as long as possible. It takes one sweep over the snapshots.</li><li><strong>T-interval connected components</strong> (after Kuhn, Lynch and Oshman, 2010). <a href="../api/#TemporalGraphs.interval_connected_components"><code>interval_connected_components</code></a> finds the maximal sets that stay connected through edges present in all <code>T</code> consecutive snapshots of every window. These sets partition the nodes, and are found by refining a partition until it no longer changes.</li></ul><p>The time steps are the grid of the time interval with the resolution of the time stamps:</p><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 310" width="600" height="310">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="260"/>
+    <line x1="170" y1="10" x2="170" y2="260"/>
+    <line x1="265" y1="10" x2="265" y2="260"/>
+    <line x1="360" y1="10" x2="360" y2="260"/>
+    <line x1="455" y1="10" x2="455" y2="260"/>
+    <line x1="550" y1="10" x2="550" y2="260"/>
+  </g>
+  <path d="M45,280 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">0</text>
+  <text x="170" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="265" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="360" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="455" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="550" y="300" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">5</text>
+  <text x="578" y="280" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M75,35 L75,95"/>
+    <path d="M170,35 L170,95"/>
+    <path d="M170,105 L170,165"/>
+    <path d="M265,35 L265,95"/>
+    <path d="M265,105 L265,165"/>
+    <path d="M550,175 L550,235"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="75" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="170" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="170" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="170" cy="170" r="5" fill="%23389826"/>
+  <circle cx="265" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="265" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="265" cy="170" r="5" fill="%23389826"/>
+  <circle cx="550" cy="170" r="5" fill="%23389826"/>
+  <circle cx="550" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+</svg>
+'/><pre><code class="language-julia-repl hljs">julia&gt; c = OrderedEdgeList(4, [(1, 2, 0, 0), (1, 2, 1, 0), (2, 3, 1, 0), (1, 2, 2, 0), (2, 3, 2, 0), (3, 4, 5, 0)]);
 
 julia&gt; persistent_components(c; resolution = 1)
 3-element Vector{@NamedTuple{nodes::Vector{Int64}, interval::Tuple{Int64, Int64}, length::Int64}}:
@@ -47,10 +201,66 @@ julia&gt; x.nodes
  (3, 4)
 
 julia&gt; has_path(x.graph, 6, 5)   # (3, 3) reaches (2, 7): 3 → 1 → 2
-true</code></pre><h2 id="Waiting-constraints:-restless-walks-and-paths"><a class="docs-heading-anchor" href="#Waiting-constraints:-restless-walks-and-paths">Waiting constraints: restless walks and paths</a><a id="Waiting-constraints:-restless-walks-and-paths-1"></a><a class="docs-heading-anchor-permalink" href="#Waiting-constraints:-restless-walks-and-paths" title="Permalink"></a></h2><p>Some processes cannot wait indefinitely at a node: a packet in a network, or an infection whose carrier recovers. A <em>β-restless</em> walk (Casteigts, Himmel, Molter and Zschoche, 2021) waits at most <code>β</code> at every intermediate node.</p><ul><li><strong>Walks.</strong> Optimal restless walks can be computed in polynomial time. <a href="../api/#TemporalGraphs.temporal_distances"><code>temporal_distances</code></a> with <code>β</code> gives earliest arrival, latest departure, fastest, minimum hop and minimum transition time walks, in <code>O(m log m)</code> time per source.</li><li><strong>Paths.</strong> A restless <em>path</em> visits every node at most once, and finding one is NP-hard for every <code>β ≥ 1</code>. <a href="../api/#TemporalGraphs.restless_path"><code>restless_path</code></a> is an exact search, pruned with the polynomial walk computation.</li></ul><p>In the example below, the only restless walk from 1 to 5 goes around the cycle 2 → 3 → 4 → 2, so it is not a path:</p><pre><code class="language-julia-repl hljs">julia&gt; g = OrderedEdgeList(5, [(1, 2, 1, 0), (2, 3, 2, 0), (3, 4, 3, 0), (4, 2, 4, 0), (2, 5, 5, 0)]);
+true</code></pre><h2 id="Waiting-constraints:-restless-walks-and-paths"><a class="docs-heading-anchor" href="#Waiting-constraints:-restless-walks-and-paths">Waiting constraints: restless walks and paths</a><a id="Waiting-constraints:-restless-walks-and-paths-1"></a><a class="docs-heading-anchor-permalink" href="#Waiting-constraints:-restless-walks-and-paths" title="Permalink"></a></h2><p>Some processes cannot wait indefinitely at a node: a packet in a network, or an infection whose carrier recovers. A <em>β-restless</em> walk (Casteigts, Himmel, Molter and Zschoche, 2021) waits at most <code>β</code> at every intermediate node.</p><ul><li><strong>Walks.</strong> Optimal restless walks can be computed in polynomial time. <a href="../api/#TemporalGraphs.temporal_distances"><code>temporal_distances</code></a> with <code>β</code> gives earliest arrival, latest departure, fastest, minimum hop and minimum transition time walks, in <code>O(m log m)</code> time per source.</li><li><strong>Paths.</strong> A restless <em>path</em> visits every node at most once, and finding one is NP-hard for every <code>β ≥ 1</code>. <a href="../api/#TemporalGraphs.restless_path"><code>restless_path</code></a> is an exact search, pruned with the polynomial walk computation.</li></ul><p>In the example below, the only restless walk from 1 to 5 goes around the cycle 2 → 3 → 4 → 2, so it is not a path:</p><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="330"/>
+    <line x1="193.8" y1="10" x2="193.8" y2="330"/>
+    <line x1="312.5" y1="10" x2="312.5" y2="330"/>
+    <line x1="431.2" y1="10" x2="431.2" y2="330"/>
+    <line x1="550" y1="10" x2="550" y2="330"/>
+  </g>
+  <path d="M45,350 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="193.8" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="312.5" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="431.2" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="550" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">5</text>
+  <text x="578" y="350" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+    <line x1="45" y1="310" x2="570" y2="310"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M75,35 L75,95"/>
+    <path d="M193.8,105 L193.8,165"/>
+    <path d="M312.5,175 L312.5,235"/>
+    <path d="M431.2,235 L431.2,105"/>
+    <path d="M550,105 L550,305"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="75" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="193.8" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="193.8" cy="170" r="5" fill="%23389826"/>
+  <circle cx="312.5" cy="170" r="5" fill="%23389826"/>
+  <circle cx="312.5" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="431.2" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="431.2" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="550" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="550" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+  <circle cx="25" cy="310" r="16" fill="%234063D8"/>
+  <text x="25" y="310" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">5</text>
+</svg>
+'/><pre><code class="language-julia-repl hljs">julia&gt; g = OrderedEdgeList(5, [(1, 2, 1, 0), (2, 3, 2, 0), (3, 4, 3, 0), (4, 2, 4, 0), (2, 5, 5, 0)]);
 
 julia&gt; temporal_distances(g, 1, EarliestArrival(); β = 1)
-5-element Vector{Int64}:
+5-element TemporalDistances{Int64}:
  0
  1
  2
@@ -63,7 +273,92 @@ true
 julia&gt; restless_path(g, 1, 5, 4)   # waiting 4 at node 2 is allowed
 2-element Vector{TemporalEdge{Int32, Int64}}:
  (1 2 1 0)
- (2 5 5 0)</code></pre><h2 id="Flows,-cuts-and-disjoint-paths"><a class="docs-heading-anchor" href="#Flows,-cuts-and-disjoint-paths">Flows, cuts and disjoint paths</a><a id="Flows,-cuts-and-disjoint-paths-1"></a><a class="docs-heading-anchor-permalink" href="#Flows,-cuts-and-disjoint-paths" title="Permalink"></a></h2><p><a href="../api/#TemporalGraphs.temporal_max_flow"><code>temporal_max_flow</code></a> computes the maximum amount that can be sent from <code>s</code> to <code>z</code> (Akrida, Czyzowicz, Gąsieniec, Kuszner and Spirakis, 2019). Each temporal edge carries at most its capacity at its time, and nodes store flow between edges. It is solved as a static maximum flow (Dinic&#39;s algorithm) in the time-expanded network, which has one node per time an edge leaves or reaches a node. Optional arguments model:</p><ul><li><strong>bounded storage:</strong> the <code>buffers</code> of the nodes;</li><li><strong>no storage beyond a waiting time:</strong> <code>β</code>, with which the flow follows restless walks.</li></ul><p><strong>Menger&#39;s theorem.</strong> The disjointness notion matters:</p><table><tr><th style="text-align: right">Disjoint paths</th><th style="text-align: right">Min-max theorem</th><th style="text-align: right">Complexity</th><th style="text-align: right">Function</th></tr><tr><td style="text-align: right">edge-disjoint</td><td style="text-align: right">= minimum temporal edge cut (Berman, 1996)</td><td style="text-align: right">polynomial</td><td style="text-align: right"><a href="../api/#TemporalGraphs.temporal_edge_disjoint_paths"><code>temporal_edge_disjoint_paths</code></a>, <a href="../api/#TemporalGraphs.temporal_min_cut"><code>temporal_min_cut</code></a></td></tr><tr><td style="text-align: right">out-disjoint (never leaving a node at the same time)</td><td style="text-align: right">= minimum set of node departure times (Mertzios, Michail and Spirakis, 2019)</td><td style="text-align: right">polynomial</td><td style="text-align: right"><a href="../api/#TemporalGraphs.temporal_out_disjoint_paths"><code>temporal_out_disjoint_paths</code></a></td></tr><tr><td style="text-align: right">vertex-disjoint</td><td style="text-align: right">fails (Kempe, Kleinberg and Kumar, 2000)</td><td style="text-align: right">NP-hard</td><td style="text-align: right">—</td></tr><tr><td style="text-align: right">vertex separator</td><td style="text-align: right">—</td><td style="text-align: right">NP-hard (Zschoche, Fluschnik, Molter and Niedermeier, 2020)</td><td style="text-align: right"><a href="../api/#TemporalGraphs.temporal_vertex_separator"><code>temporal_vertex_separator</code></a></td></tr></table><p>The example of Kempe, Kleinberg and Kumar has no two vertex-disjoint paths from 1 to 5, but a minimum vertex separator needs two nodes:</p><pre><code class="language-julia-repl hljs">julia&gt; und(es) = reduce(vcat, [[(u, v, t, tt), (v, u, t, tt)] for (u, v, t, tt) in es]);
+ (2 5 5 0)</code></pre><h2 id="Flows,-cuts-and-disjoint-paths"><a class="docs-heading-anchor" href="#Flows,-cuts-and-disjoint-paths">Flows, cuts and disjoint paths</a><a id="Flows,-cuts-and-disjoint-paths-1"></a><a class="docs-heading-anchor-permalink" href="#Flows,-cuts-and-disjoint-paths" title="Permalink"></a></h2><p><a href="../api/#TemporalGraphs.temporal_max_flow"><code>temporal_max_flow</code></a> computes the maximum amount that can be sent from <code>s</code> to <code>z</code> (Akrida, Czyzowicz, Gąsieniec, Kuszner and Spirakis, 2019). Each temporal edge carries at most its capacity at its time, and nodes store flow between edges. It is solved as a static maximum flow (Dinic&#39;s algorithm) in the time-expanded network, which has one node per time an edge leaves or reaches a node. Optional arguments model:</p><ul><li><strong>bounded storage:</strong> the <code>buffers</code> of the nodes;</li><li><strong>no storage beyond a waiting time:</strong> <code>β</code>, with which the flow follows restless walks.</li></ul><p><strong>Menger&#39;s theorem.</strong> The disjointness notion matters:</p><table><tr><th style="text-align: right">Disjoint paths</th><th style="text-align: right">Min-max theorem</th><th style="text-align: right">Complexity</th><th style="text-align: right">Function</th></tr><tr><td style="text-align: right">edge-disjoint</td><td style="text-align: right">= minimum temporal edge cut (Berman, 1996)</td><td style="text-align: right">polynomial</td><td style="text-align: right"><a href="../api/#TemporalGraphs.temporal_edge_disjoint_paths"><code>temporal_edge_disjoint_paths</code></a>, <a href="../api/#TemporalGraphs.temporal_min_cut"><code>temporal_min_cut</code></a></td></tr><tr><td style="text-align: right">out-disjoint (never leaving a node at the same time)</td><td style="text-align: right">= minimum set of node departure times (Mertzios, Michail and Spirakis, 2019)</td><td style="text-align: right">polynomial</td><td style="text-align: right"><a href="../api/#TemporalGraphs.temporal_out_disjoint_paths"><code>temporal_out_disjoint_paths</code></a></td></tr><tr><td style="text-align: right">vertex-disjoint</td><td style="text-align: right">fails (Kempe, Kleinberg and Kumar, 2000)</td><td style="text-align: right">NP-hard</td><td style="text-align: right">—</td></tr><tr><td style="text-align: right">vertex separator</td><td style="text-align: right">—</td><td style="text-align: right">NP-hard (Zschoche, Fluschnik, Molter and Niedermeier, 2020)</td><td style="text-align: right"><a href="../api/#TemporalGraphs.temporal_vertex_separator"><code>temporal_vertex_separator</code></a></td></tr></table><p>The example of Kempe, Kleinberg and Kumar has no two vertex-disjoint paths from 1 to 5, but a minimum vertex separator needs two nodes:</p><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="330"/>
+    <line x1="142.9" y1="10" x2="142.9" y2="330"/>
+    <line x1="210.7" y1="10" x2="210.7" y2="330"/>
+    <line x1="278.6" y1="10" x2="278.6" y2="330"/>
+    <line x1="346.4" y1="10" x2="346.4" y2="330"/>
+    <line x1="414.3" y1="10" x2="414.3" y2="330"/>
+    <line x1="482.1" y1="10" x2="482.1" y2="330"/>
+    <line x1="550" y1="10" x2="550" y2="330"/>
+  </g>
+  <path d="M45,350 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="142.9" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="210.7" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="278.6" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="346.4" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">5</text>
+  <text x="414.3" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">6</text>
+  <text x="482.1" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">7</text>
+  <text x="550" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">8</text>
+  <text x="578" y="350" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+    <line x1="45" y1="310" x2="570" y2="310"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M78.5,33.6 L139.4,96.4"/>
+    <path d="M78.5,96.4 L139.4,33.6"/>
+    <path d="M146.3,103.6 L207.2,166.4"/>
+    <path d="M146.3,166.4 L207.2,103.6"/>
+    <path d="M212.9,174.5 L276.4,305.5"/>
+    <path d="M212.9,305.5 L276.4,174.5"/>
+    <path d="M280.8,104.5 L344.2,235.5"/>
+    <path d="M280.8,235.5 L344.2,104.5"/>
+    <path d="M348.6,34.5 L412.1,165.5"/>
+    <path d="M348.6,165.5 L412.1,34.5"/>
+    <path d="M417.8,173.6 L478.7,236.4"/>
+    <path d="M417.8,236.4 L478.7,173.6"/>
+    <path d="M485.6,243.6 L546.5,306.4"/>
+    <path d="M485.6,306.4 L546.5,243.6"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="75" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="142.9" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="142.9" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="142.9" cy="170" r="5" fill="%23389826"/>
+  <circle cx="210.7" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="210.7" cy="170" r="5" fill="%23389826"/>
+  <circle cx="210.7" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="278.6" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="278.6" cy="170" r="5" fill="%23389826"/>
+  <circle cx="278.6" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="278.6" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="346.4" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="346.4" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="346.4" cy="170" r="5" fill="%23389826"/>
+  <circle cx="346.4" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="414.3" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="414.3" cy="170" r="5" fill="%23389826"/>
+  <circle cx="414.3" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="482.1" cy="170" r="5" fill="%23389826"/>
+  <circle cx="482.1" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="482.1" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="550" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="550" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+  <circle cx="25" cy="310" r="16" fill="%234063D8"/>
+  <text x="25" y="310" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">5</text>
+</svg>
+'/><pre><code class="language-julia-repl hljs">julia&gt; und(es) = reduce(vcat, [[(u, v, t, tt), (v, u, t, tt)] for (u, v, t, tt) in es]);
 
 julia&gt; g = OrderedEdgeList(5, und([(1, 2, 1, 1), (2, 3, 2, 1), (3, 5, 3, 1), (2, 4, 4, 1),
                                    (1, 3, 5, 1), (3, 4, 6, 1), (4, 5, 7, 1)]));
@@ -76,7 +371,80 @@ julia&gt; temporal_vertex_separator(g, 1, 5)
 julia&gt; temporal_edge_disjoint_paths(g, 1, 5)
 2-element Vector{Vector{TemporalEdge{Int32, Int64}}}:
  [(1 3 5 1), (3 4 6 1), (4 5 7 1)]
- [(1 2 1 1), (2 3 2 1), (3 5 3 1)]</code></pre><p>The separator is exact. It branches on the inner nodes of a minimum hop path, which is fixed-parameter tractable in the size of the separator and the number of time stamps for strict paths.</p><h2 id="Spanning-trees-and-spanners"><a class="docs-heading-anchor" href="#Spanning-trees-and-spanners">Spanning trees and spanners</a><a id="Spanning-trees-and-spanners-1"></a><a class="docs-heading-anchor-permalink" href="#Spanning-trees-and-spanners" title="Permalink"></a></h2><p>A <em>temporal spanning tree</em> rooted at <code>r</code> (Huang, Fu and Liu, 2015) contains one incoming edge for each node reachable from <code>r</code>, such that every tree path is a temporal path. There are two versions:</p><ul><li><a href="../api/#TemporalGraphs.earliest_arrival_tree"><code>earliest_arrival_tree</code></a> (<em>MST_a</em>) reaches every node at its earliest arrival time, in linear time. It uses the stack-based algorithm of the paper, which is also correct for transition times 0.</li><li><a href="../api/#TemporalGraphs.minimum_weight_spanning_tree"><code>minimum_weight_spanning_tree</code></a> (<em>MST_w</em>) minimizes the total weight. This is NP-hard, so it is approximated by the paper&#39;s reduction to the Directed Steiner Tree problem, solved with the greedy algorithm of Charikar et al.</li></ul><p>On random graphs the level-2 approximation was within 0.5% of the optimum on average (computed by brute force), and never worse than 1.5 times it.</p><pre><code class="language-julia-repl hljs">julia&gt; g = OrderedEdgeList(6, [(1, 2, 1, 2), (1, 3, 1, 4), (1, 3, 3, 3), (1, 2, 4, 1),
+ [(1 2 1 1), (2 3 2 1), (3 5 3 1)]</code></pre><p>The separator is exact. It branches on the inner nodes of a minimum hop path, which is fixed-parameter tractable in the size of the separator and the number of time stamps for strict paths.</p><h2 id="Spanning-trees-and-spanners"><a class="docs-heading-anchor" href="#Spanning-trees-and-spanners">Spanning trees and spanners</a><a id="Spanning-trees-and-spanners-1"></a><a class="docs-heading-anchor-permalink" href="#Spanning-trees-and-spanners" title="Permalink"></a></h2><p>A <em>temporal spanning tree</em> rooted at <code>r</code> (Huang, Fu and Liu, 2015) contains one incoming edge for each node reachable from <code>r</code>, such that every tree path is a temporal path. There are two versions:</p><ul><li><a href="../api/#TemporalGraphs.earliest_arrival_tree"><code>earliest_arrival_tree</code></a> (<em>MST_a</em>) reaches every node at its earliest arrival time, in linear time. It uses the stack-based algorithm of the paper, which is also correct for transition times 0.</li><li><a href="../api/#TemporalGraphs.minimum_weight_spanning_tree"><code>minimum_weight_spanning_tree</code></a> (<em>MST_w</em>) minimizes the total weight. This is NP-hard, so it is approximated by the paper&#39;s reduction to the Directed Steiner Tree problem, solved with the greedy algorithm of Charikar et al.</li></ul><p>On random graphs the level-2 approximation was within 0.5% of the optimum on average (computed by brute force), and never worse than 1.5 times it.</p><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="400"/>
+    <line x1="134.4" y1="10" x2="134.4" y2="400"/>
+    <line x1="193.8" y1="10" x2="193.8" y2="400"/>
+    <line x1="253.1" y1="10" x2="253.1" y2="400"/>
+    <line x1="312.5" y1="10" x2="312.5" y2="400"/>
+    <line x1="371.9" y1="10" x2="371.9" y2="400"/>
+    <line x1="431.2" y1="10" x2="431.2" y2="400"/>
+    <line x1="490.6" y1="10" x2="490.6" y2="400"/>
+    <line x1="550" y1="10" x2="550" y2="400"/>
+  </g>
+  <path d="M45,420 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="134.4" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="193.8" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="253.1" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="312.5" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">5</text>
+  <text x="371.9" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">6</text>
+  <text x="431.2" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">7</text>
+  <text x="490.6" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">8</text>
+  <text x="550" y="440" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">9</text>
+  <text x="578" y="420" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+    <line x1="45" y1="310" x2="570" y2="310"/>
+    <line x1="45" y1="380" x2="570" y2="380"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M78.2,33.8 L190.5,166.2"/>
+    <path d="M79.8,31.4 L307.7,98.6"/>
+    <path d="M198.4,31.8 L367.2,98.2"/>
+    <path d="M255.1,34.6 L310.5,165.4"/>
+    <path d="M257.4,172.5 L367.6,237.5"/>
+    <path d="M316.4,173.1 L486.7,306.9"/>
+    <path d="M373.8,104.6 L488.7,375.4"/>
+    <path d="M433.7,104.4 L547.5,305.6"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="193.8" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="193.8" cy="170" r="5" fill="%23CB3C33"/>
+  <circle cx="253.1" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="253.1" cy="170" r="5" fill="%23CB3C33"/>
+  <circle cx="312.5" cy="170" r="5" fill="%23CB3C33"/>
+  <circle cx="312.5" cy="100" r="5" fill="%23389826"/>
+  <circle cx="371.9" cy="100" r="5" fill="%23389826"/>
+  <circle cx="371.9" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="431.2" cy="100" r="5" fill="%23389826"/>
+  <circle cx="490.6" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="490.6" cy="380" r="5" fill="%23CB3C33"/>
+  <circle cx="550" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23389826"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="170" r="16" fill="%23CB3C33"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+  <circle cx="25" cy="310" r="16" fill="%234063D8"/>
+  <text x="25" y="310" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">5</text>
+  <circle cx="25" cy="380" r="16" fill="%23CB3C33"/>
+  <text x="25" y="380" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">6</text>
+</svg>
+'/><pre><code class="language-julia-repl hljs">julia&gt; g = OrderedEdgeList(6, [(1, 2, 1, 2), (1, 3, 1, 4), (1, 3, 3, 3), (1, 2, 4, 1),
                                (2, 4, 4, 2), (2, 5, 5, 3), (3, 6, 6, 2), (3, 5, 7, 2)]);
 
 julia&gt; earliest_arrival_tree(g, 1)
@@ -88,7 +456,160 @@ julia&gt; earliest_arrival_tree(g, 1)
  (3 6 6 2)
 
 julia&gt; minimum_weight_spanning_tree(g, 1).weight   # weights = transition times
-11.0</code></pre><p>A <em>temporal spanner</em> is a subset of the edges that keeps the reachability between all pairs of nodes. Minimum spanners are NP-hard to compute and to approximate (Axiotis and Fotakis, 2016), and some graphs need <span>$Ω(n^2)$</span> edges.</p><ul><li><a href="../api/#TemporalGraphs.temporal_spanner"><code>temporal_spanner</code></a> returns the union of the earliest arrival trees of all nodes. With <code>minimal = true</code> it then removes edges as long as the reachability does not change, so the result is inclusion-minimal.</li><li><a href="../api/#TemporalGraphs.temporal_clique_spanner"><code>temporal_clique_spanner</code></a> handles <em>temporal cliques</em>, where every pair of nodes has one time label. These always admit spanners of size <span>$O(n \log n)$</span> (Casteigts, Peters and Schoeters, 2021), and the function computes one with the algorithm of Angrick et al. (2024). On random temporal cliques with 128 nodes the spanners keep about 480 of the 8128 pairs.</li></ul><h2 id="Temporal-graph-isomorphisms"><a class="docs-heading-anchor" href="#Temporal-graph-isomorphisms">Temporal graph isomorphisms</a><a id="Temporal-graph-isomorphisms-1"></a><a class="docs-heading-anchor-permalink" href="#Temporal-graph-isomorphisms" title="Permalink"></a></h2><p>When are two temporal graphs &quot;the same&quot;? Heeg, Sauer, Mutzel and Scholtes (2025) compare three notions, from the weakest to the strongest:</p><table><tr><th style="text-align: right"><code>kind</code></th><th style="text-align: right">The graphs are isomorphic if…</th></tr><tr><td style="text-align: right"><code>:aggregated</code></td><td style="text-align: right">the static graphs with the number of temporal edges of every pair are isomorphic</td></tr><tr><td style="text-align: right"><code>:event</code></td><td style="text-align: right">a bijection of the nodes and of the temporal edges preserves all time-respecting paths (<em>time-respecting path isomorphism</em>)</td></tr><tr><td style="text-align: right"><code>:concatenated</code></td><td style="text-align: right">the static graphs with the timestamps of every pair (relative to the first one) are isomorphic (<em>timewise isomorphism</em>)</td></tr></table><p>The <code>:event</code> notion only cares about the causal structure: timestamps may change, as long as the same time-respecting paths exist. In the example of Figure 2 of the paper, <code>G3</code> swaps the times of two edges that lie on no common time-respecting path. The paper uses a maximum time difference <span>$δ = 2$</span> between consecutive edges with unit transition times, which is <code>β = δ - 1 = 1</code> here.</p><pre><code class="language-julia-repl hljs">julia&gt; G(es) = OrderedEdgeList(5, [(u, v, t, 1) for (u, v, t) in es]);
+11.0</code></pre><p>A <em>temporal spanner</em> is a subset of the edges that keeps the reachability between all pairs of nodes. Minimum spanners are NP-hard to compute and to approximate (Axiotis and Fotakis, 2016), and some graphs need <span>$Ω(n^2)$</span> edges.</p><ul><li><a href="../api/#TemporalGraphs.temporal_spanner"><code>temporal_spanner</code></a> returns the union of the earliest arrival trees of all nodes. With <code>minimal = true</code> it then removes edges as long as the reachability does not change, so the result is inclusion-minimal.</li><li><a href="../api/#TemporalGraphs.temporal_clique_spanner"><code>temporal_clique_spanner</code></a> handles <em>temporal cliques</em>, where every pair of nodes has one time label. These always admit spanners of size <span>$O(n \log n)$</span> (Casteigts, Peters and Schoeters, 2021), and the function computes one with the algorithm of Angrick et al. (2024). On random temporal cliques with 128 nodes the spanners keep about 480 of the 8128 pairs.</li></ul><h2 id="Temporal-graph-isomorphisms"><a class="docs-heading-anchor" href="#Temporal-graph-isomorphisms">Temporal graph isomorphisms</a><a id="Temporal-graph-isomorphisms-1"></a><a class="docs-heading-anchor-permalink" href="#Temporal-graph-isomorphisms" title="Permalink"></a></h2><p>When are two temporal graphs &quot;the same&quot;? Heeg, Sauer, Mutzel and Scholtes (2025) compare three notions, from the weakest to the strongest:</p><table><tr><th style="text-align: right"><code>kind</code></th><th style="text-align: right">The graphs are isomorphic if…</th></tr><tr><td style="text-align: right"><code>:aggregated</code></td><td style="text-align: right">the static graphs with the number of temporal edges of every pair are isomorphic</td></tr><tr><td style="text-align: right"><code>:event</code></td><td style="text-align: right">a bijection of the nodes and of the temporal edges preserves all time-respecting paths (<em>time-respecting path isomorphism</em>)</td></tr><tr><td style="text-align: right"><code>:concatenated</code></td><td style="text-align: right">the static graphs with the timestamps of every pair (relative to the first one) are isomorphic (<em>timewise isomorphism</em>)</td></tr></table><p>The <code>:event</code> notion only cares about the causal structure: timestamps may change, as long as the same time-respecting paths exist. In the example of Figure 2 of the paper, <code>G3</code> swaps the times of two edges that lie on no common time-respecting path. The paper uses a maximum time difference <span>$δ = 2$</span> between consecutive edges with unit transition times, which is <code>β = δ - 1 = 1</code> here.</p><p>The timelines of <code>G1</code>, <code>G3</code> and <code>G4</code>:</p><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="330"/>
+    <line x1="193.8" y1="10" x2="193.8" y2="330"/>
+    <line x1="312.5" y1="10" x2="312.5" y2="330"/>
+    <line x1="431.2" y1="10" x2="431.2" y2="330"/>
+    <line x1="550" y1="10" x2="550" y2="330"/>
+  </g>
+  <path d="M45,350 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="193.8" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="312.5" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="431.2" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="550" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">5</text>
+  <text x="578" y="350" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+    <line x1="45" y1="310" x2="570" y2="310"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M79.3,32.5 L189.4,97.5"/>
+    <path d="M197,103.8 L309.3,236.2"/>
+    <path d="M316.8,172.5 L426.9,237.5"/>
+    <path d="M435.6,242.5 L545.7,307.5"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="193.8" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="312.5" cy="170" r="5" fill="%23389826"/>
+  <circle cx="312.5" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="431.2" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="550" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+  <circle cx="25" cy="310" r="16" fill="%234063D8"/>
+  <text x="25" y="310" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">5</text>
+</svg>
+'/><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="330"/>
+    <line x1="193.8" y1="10" x2="193.8" y2="330"/>
+    <line x1="312.5" y1="10" x2="312.5" y2="330"/>
+    <line x1="431.2" y1="10" x2="431.2" y2="330"/>
+    <line x1="550" y1="10" x2="550" y2="330"/>
+  </g>
+  <path d="M45,350 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="193.8" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="312.5" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="431.2" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="550" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">5</text>
+  <text x="578" y="350" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+    <line x1="45" y1="310" x2="570" y2="310"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M79.3,32.5 L189.4,97.5"/>
+    <path d="M198.1,172.5 L308.2,237.5"/>
+    <path d="M315.7,103.8 L428,236.2"/>
+    <path d="M435.6,242.5 L545.7,307.5"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="193.8" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="193.8" cy="170" r="5" fill="%23389826"/>
+  <circle cx="312.5" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="312.5" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="431.2" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="550" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+  <circle cx="25" cy="310" r="16" fill="%234063D8"/>
+  <text x="25" y="310" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">5</text>
+</svg>
+'/><img src='data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <title>Timelines of a temporal graph</title>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="%23707070"/>
+    </marker>
+  </defs>
+  <g stroke="%238C8C8C" stroke-width="1" stroke-opacity="0.45">
+    <line x1="75" y1="10" x2="75" y2="330"/>
+    <line x1="233.3" y1="10" x2="233.3" y2="330"/>
+    <line x1="391.7" y1="10" x2="391.7" y2="330"/>
+    <line x1="550" y1="10" x2="550" y2="330"/>
+  </g>
+  <path d="M45,350 H570" stroke="%23707070" stroke-width="2" fill="none" marker-end="url(%23head)"/>
+  <text x="75" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1</text>
+  <text x="233.3" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2</text>
+  <text x="391.7" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">3</text>
+  <text x="550" y="370" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4</text>
+  <text x="578" y="350" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="%231A1A1A" stroke="%23FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">t</text>
+  <g stroke="%238C8C8C" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round">
+    <line x1="45" y1="30" x2="570" y2="30"/>
+    <line x1="45" y1="100" x2="570" y2="100"/>
+    <line x1="45" y1="170" x2="570" y2="170"/>
+    <line x1="45" y1="240" x2="570" y2="240"/>
+    <line x1="45" y1="310" x2="570" y2="310"/>
+  </g>
+  <g stroke="%23707070" stroke-width="2.5" fill="none" marker-end="url(%23head)">
+    <path d="M79.6,32 L228.8,98"/>
+    <path d="M79.6,242 L228.8,308"/>
+    <path d="M237.1,103.3 L387.9,236.7"/>
+    <path d="M396.2,172 L545.4,238"/>
+  </g>
+  <circle cx="75" cy="30" r="5" fill="%234063D8"/>
+  <circle cx="75" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="233.3" cy="100" r="5" fill="%23CB3C33"/>
+  <circle cx="233.3" cy="310" r="5" fill="%234063D8"/>
+  <circle cx="391.7" cy="170" r="5" fill="%23389826"/>
+  <circle cx="391.7" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="550" cy="240" r="5" fill="%239558B2"/>
+  <circle cx="25" cy="30" r="16" fill="%234063D8"/>
+  <text x="25" y="30" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="25" cy="100" r="16" fill="%23CB3C33"/>
+  <text x="25" y="100" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="25" cy="170" r="16" fill="%23389826"/>
+  <text x="25" y="170" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="25" cy="240" r="16" fill="%239558B2"/>
+  <text x="25" y="240" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
+  <circle cx="25" cy="310" r="16" fill="%234063D8"/>
+  <text x="25" y="310" text-anchor="middle" dominant-baseline="central" font-size="14.4" font-weight="bold" fill="%23FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">5</text>
+</svg>
+'/><pre><code class="language-julia-repl hljs">julia&gt; G(es) = OrderedEdgeList(5, [(u, v, t, 1) for (u, v, t) in es]);
 
 julia&gt; G1 = G([(1, 2, 1), (2, 4, 2), (3, 4, 3), (4, 5, 4)]);
 
@@ -103,4 +624,4 @@ julia&gt; [is_temporally_isomorphic(G1, H; kind = k, β = 1) for k in (:aggregat
  0  0
 
 julia&gt; temporal_isomorphism(G1, G3; β = 1)   # nodes and edges of G1 → G3
-(nodes = [1, 2, 3, 4, 5], edges = [1, 3, 2, 4])</code></pre><p><strong>How it is computed.</strong> Time-respecting path isomorphism is equivalent to static isomorphism of the <a href="../api/#TemporalGraphs.augmented_event_graph"><code>augmented_event_graph</code></a>s (Theorem 1 of the paper). This graph has a node for every temporal edge, an arc between consecutive edges of time-respecting paths, and the original nodes connected to their edges.</p><p><a href="../api/#TemporalGraphs.temporal_isomorphism"><code>temporal_isomorphism</code></a> decides isomorphism exactly, by individualization and refinement:</p><ul><li>the two graphs are colored together with the directed Weisfeiler–Leman algorithm (D-WL);</li><li>when the coloring stops changing, one node per graph is given a fresh color, and the coloring is refined incrementally;</li><li>the search backtracks through an undo trail if the color classes of the two graphs differ.</li></ul><p>Graph isomorphism has no known polynomial algorithm, but this is fast on temporal networks. On the whole SocioPatterns workplace data (39,308 temporal edges, with an hour as maximum time difference), an isomorphism to a copy with renamed nodes and event graph components rearranged in time is found in 3 s.</p><p><strong>Weisfeiler–Leman test and kernel.</strong></p><ul><li><a href="../api/#TemporalGraphs.temporal_wl_equivalent"><code>temporal_wl_equivalent</code></a> is the one-sided test of the paper. If D-WL distinguishes the augmented event graphs, the temporal graphs are not isomorphic; otherwise neither D-WL nor message passing neural networks on the augmented event graph can tell them apart.</li><li><a href="../api/#TemporalGraphs.temporal_wl_kernel"><code>temporal_wl_kernel</code></a> computes the Weisfeiler–Leman subtree kernel of a collection of temporal graphs, for temporal graph classification. With <code>augmented = false</code> it runs on the event graph alone, as the temporal graph kernel of Oettershagen, Kriege, Morris and Mutzel (2020). That variant does not see which nodes the temporal edges join.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>S. Bhadra and A. Ferreira. <em>Complexity of connected components in evolving graphs and the computation of multicast trees in wireless networks.</em> ADHOC-NOW, 2003. <a href="https://doi.org/10.1007/978-3-540-39611-6_23">DOI</a></li><li>I. L. Costa, R. Lopes, A. Marino, and A. Silva. <em>On computing large temporal (unilateral) connected components.</em> Journal of Computer and System Sciences 144, 2024. <a href="https://doi.org/10.1016/j.jcss.2024.103548">DOI</a>, <a href="https://arxiv.org/abs/2302.12068">arXiv</a></li><li>E. Tomita and T. Seki. <em>An efficient branch-and-bound algorithm for finding a maximum clique.</em> DMTCS, 2003. <a href="https://doi.org/10.1007/3-540-45066-1_22">DOI</a></li><li>A. Casteigts, A.-S. Himmel, H. Molter, and P. Zschoche. <em>Finding temporal paths under waiting time constraints.</em> Algorithmica 83(9), 2021. <a href="https://doi.org/10.1007/s00453-021-00831-w">DOI</a>, <a href="https://arxiv.org/abs/1909.06437">arXiv</a></li><li>E. C. Akrida, J. Czyzowicz, L. Gąsieniec, Ł. Kuszner, and P. G. Spirakis. <em>Temporal flows in temporal networks.</em> Journal of Computer and System Sciences 103, 2019. <a href="https://doi.org/10.1016/j.jcss.2019.02.003">DOI</a>, <a href="https://arxiv.org/abs/1606.01091">arXiv</a></li><li>K. A. Berman. <em>Vulnerability of scheduled networks and a generalization of Menger&#39;s theorem.</em> Networks 28(3), 1996. <a href="https://doi.org/10.1002/%28SICI%291097-0037%28199610%2928%3A3%3C125%3A%3AAID-NET1%3E3.0.CO%3B2-P">DOI</a></li><li>D. Kempe, J. Kleinberg, and A. Kumar. <em>Connectivity and inference problems for temporal networks.</em> Journal of Computer and System Sciences 64(4), 2002. <a href="https://doi.org/10.1006/jcss.2002.1829">DOI</a></li><li>G. B. Mertzios, O. Michail, and P. G. Spirakis. <em>Temporal network optimization subject to connectivity constraints.</em> Algorithmica 81(4), 2019. <a href="https://doi.org/10.1007/s00453-018-0478-6">DOI</a>, <a href="https://arxiv.org/abs/1502.04382">arXiv</a></li><li>P. Zschoche, T. Fluschnik, H. Molter, and R. Niedermeier. <em>The complexity of finding small separators in temporal graphs.</em> Journal of Computer and System Sciences 107, 2020. <a href="https://doi.org/10.1016/j.jcss.2019.07.006">DOI</a>, <a href="https://arxiv.org/abs/1711.00963">arXiv</a></li><li>S. Huang, A. W.-C. Fu, and R. Liu. <em>Minimum spanning trees in temporal graphs.</em> SIGMOD, 2015. <a href="https://doi.org/10.1145/2723372.2723717">DOI</a></li><li>M. Charikar, C. Chekuri, T. Cheung, Z. Dai, A. Goel, S. Guha, and M. Li. <em>Approximation algorithms for directed Steiner problems.</em> Journal of Algorithms 33(1), 1999. <a href="https://doi.org/10.1006/jagm.1999.1042">DOI</a></li><li>K. Axiotis and D. Fotakis. <em>On the size and the approximability of minimum temporally connected subgraphs.</em> ICALP, 2016. <a href="https://doi.org/10.4230/LIPIcs.ICALP.2016.149">DOI</a>, <a href="https://arxiv.org/abs/1602.06411">arXiv</a></li><li>A. Casteigts, J. G. Peters, and J. Schoeters. <em>Temporal cliques admit sparse spanners.</em> Journal of Computer and System Sciences 121, 2021. <a href="https://doi.org/10.1016/j.jcss.2021.04.004">DOI</a>, <a href="https://arxiv.org/abs/1810.00104">arXiv</a></li><li>S. Angrick, B. Bals, T. Friedrich, H. Gawendowicz, N. Hastrich, N. Klodt, P. Lenzner, J. Schmidt, G. Skretas, and A. Wells. <em>How to reduce temporal cliques to find sparse spanners.</em> ESA, 2024. <a href="https://doi.org/10.4230/LIPIcs.ESA.2024.11">DOI</a>, <a href="https://arxiv.org/abs/2402.13624">arXiv</a></li><li>M. Vernet, Y. Pigné, and É. Sanlaville. <em>A study of connectivity on dynamic graphs: computing persistent connected components.</em> 4OR 21, 2023. <a href="https://doi.org/10.1007/s10288-022-00507-3">DOI</a></li><li>F. Kuhn, N. Lynch, and R. Oshman. <em>Distributed computation in dynamic networks.</em> STOC, 2010. <a href="https://doi.org/10.1145/1806689.1806760">DOI</a></li><li>A. Casteigts, R. Klasing, Y. M. Neggaz, and J. G. Peters. <em>Efficiently testing T-interval connectivity in dynamic graphs.</em> CIAC, 2015. <a href="https://doi.org/10.1007/978-3-319-18173-8_6">DOI</a></li><li>A. E. F. Clementi, C. Macci, A. Monti, F. Pasquale, and R. Silvestri. <em>Flooding time of edge-Markovian evolving graphs.</em> SIAM Journal on Discrete Mathematics 24, 2010. <a href="https://doi.org/10.1137/090756053">DOI</a></li><li>M. Döring. <em>Temporal Graph Wiki.</em> <a href="https://temporalgraph.notion.site/">temporalgraph.notion.site</a></li><li>F. Heeg, J. Sauer, P. Mutzel, and I. Scholtes. <em>Weisfeiler and Leman follow the arrow of time: expressive power of message passing in temporal event graphs.</em> 2025. <a href="https://arxiv.org/abs/2505.24438">arXiv</a></li><li>P. A. Wałęga and M. Rawson. <em>Expressive power of temporal message passing.</em> AAAI, 2025. <a href="https://doi.org/10.1609/aaai.v39i20.35396">DOI</a></li><li>L. Oettershagen, N. M. Kriege, C. Morris, and P. Mutzel. <em>Temporal graph kernels for classifying dissemination processes.</em> SDM, 2020. <a href="https://doi.org/10.1137/1.9781611976236.56">DOI</a>, <a href="https://arxiv.org/abs/1911.05496">arXiv</a></li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../motifs/">« Motifs and reference models</a><a class="docs-footer-nextpage" href="../representations/">Graph representations »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Monday 5 October 2026 12:44">Monday 5 October 2026</span>. Using Julia version 1.13.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+(nodes = [1, 2, 3, 4, 5], edges = [1, 3, 2, 4])</code></pre><p><strong>How it is computed.</strong> Time-respecting path isomorphism is equivalent to static isomorphism of the <a href="../api/#TemporalGraphs.augmented_event_graph"><code>augmented_event_graph</code></a>s (Theorem 1 of the paper). This graph has a node for every temporal edge, an arc between consecutive edges of time-respecting paths, and the original nodes connected to their edges.</p><p><a href="../api/#TemporalGraphs.temporal_isomorphism"><code>temporal_isomorphism</code></a> decides isomorphism exactly, by individualization and refinement:</p><ul><li>the two graphs are colored together with the directed Weisfeiler–Leman algorithm (D-WL);</li><li>when the coloring stops changing, one node per graph is given a fresh color, and the coloring is refined incrementally;</li><li>the search backtracks through an undo trail if the color classes of the two graphs differ.</li></ul><p>Graph isomorphism has no known polynomial algorithm, but this is fast on temporal networks. On the whole SocioPatterns workplace data (39,308 temporal edges, with an hour as maximum time difference), an isomorphism to a copy with renamed nodes and event graph components rearranged in time is found in 3 s.</p><p><strong>Weisfeiler–Leman test and kernel.</strong></p><ul><li><a href="../api/#TemporalGraphs.temporal_wl_equivalent"><code>temporal_wl_equivalent</code></a> is the one-sided test of the paper. If D-WL distinguishes the augmented event graphs, the temporal graphs are not isomorphic; otherwise neither D-WL nor message passing neural networks on the augmented event graph can tell them apart.</li><li><a href="../api/#TemporalGraphs.temporal_wl_kernel"><code>temporal_wl_kernel</code></a> computes the Weisfeiler–Leman subtree kernel of a collection of temporal graphs, for temporal graph classification. With <code>augmented = false</code> it runs on the event graph alone, as the temporal graph kernel of Oettershagen, Kriege, Morris and Mutzel (2020). That variant does not see which nodes the temporal edges join.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>S. Bhadra and A. Ferreira. <em>Complexity of connected components in evolving graphs and the computation of multicast trees in wireless networks.</em> ADHOC-NOW, 2003. <a href="https://doi.org/10.1007/978-3-540-39611-6_23">DOI</a></li><li>I. L. Costa, R. Lopes, A. Marino, and A. Silva. <em>On computing large temporal (unilateral) connected components.</em> Journal of Computer and System Sciences 144, 2024. <a href="https://doi.org/10.1016/j.jcss.2024.103548">DOI</a>, <a href="https://arxiv.org/abs/2302.12068">arXiv</a></li><li>E. Tomita and T. Seki. <em>An efficient branch-and-bound algorithm for finding a maximum clique.</em> DMTCS, 2003. <a href="https://doi.org/10.1007/3-540-45066-1_22">DOI</a></li><li>A. Casteigts, A.-S. Himmel, H. Molter, and P. Zschoche. <em>Finding temporal paths under waiting time constraints.</em> Algorithmica 83(9), 2021. <a href="https://doi.org/10.1007/s00453-021-00831-w">DOI</a>, <a href="https://arxiv.org/abs/1909.06437">arXiv</a></li><li>E. C. Akrida, J. Czyzowicz, L. Gąsieniec, Ł. Kuszner, and P. G. Spirakis. <em>Temporal flows in temporal networks.</em> Journal of Computer and System Sciences 103, 2019. <a href="https://doi.org/10.1016/j.jcss.2019.02.003">DOI</a>, <a href="https://arxiv.org/abs/1606.01091">arXiv</a></li><li>K. A. Berman. <em>Vulnerability of scheduled networks and a generalization of Menger&#39;s theorem.</em> Networks 28(3), 1996. <a href="https://doi.org/10.1002/%28SICI%291097-0037%28199610%2928%3A3%3C125%3A%3AAID-NET1%3E3.0.CO%3B2-P">DOI</a></li><li>D. Kempe, J. Kleinberg, and A. Kumar. <em>Connectivity and inference problems for temporal networks.</em> Journal of Computer and System Sciences 64(4), 2002. <a href="https://doi.org/10.1006/jcss.2002.1829">DOI</a></li><li>G. B. Mertzios, O. Michail, and P. G. Spirakis. <em>Temporal network optimization subject to connectivity constraints.</em> Algorithmica 81(4), 2019. <a href="https://doi.org/10.1007/s00453-018-0478-6">DOI</a>, <a href="https://arxiv.org/abs/1502.04382">arXiv</a></li><li>P. Zschoche, T. Fluschnik, H. Molter, and R. Niedermeier. <em>The complexity of finding small separators in temporal graphs.</em> Journal of Computer and System Sciences 107, 2020. <a href="https://doi.org/10.1016/j.jcss.2019.07.006">DOI</a>, <a href="https://arxiv.org/abs/1711.00963">arXiv</a></li><li>S. Huang, A. W.-C. Fu, and R. Liu. <em>Minimum spanning trees in temporal graphs.</em> SIGMOD, 2015. <a href="https://doi.org/10.1145/2723372.2723717">DOI</a></li><li>M. Charikar, C. Chekuri, T. Cheung, Z. Dai, A. Goel, S. Guha, and M. Li. <em>Approximation algorithms for directed Steiner problems.</em> Journal of Algorithms 33(1), 1999. <a href="https://doi.org/10.1006/jagm.1999.1042">DOI</a></li><li>K. Axiotis and D. Fotakis. <em>On the size and the approximability of minimum temporally connected subgraphs.</em> ICALP, 2016. <a href="https://doi.org/10.4230/LIPIcs.ICALP.2016.149">DOI</a>, <a href="https://arxiv.org/abs/1602.06411">arXiv</a></li><li>A. Casteigts, J. G. Peters, and J. Schoeters. <em>Temporal cliques admit sparse spanners.</em> Journal of Computer and System Sciences 121, 2021. <a href="https://doi.org/10.1016/j.jcss.2021.04.004">DOI</a>, <a href="https://arxiv.org/abs/1810.00104">arXiv</a></li><li>S. Angrick, B. Bals, T. Friedrich, H. Gawendowicz, N. Hastrich, N. Klodt, P. Lenzner, J. Schmidt, G. Skretas, and A. Wells. <em>How to reduce temporal cliques to find sparse spanners.</em> ESA, 2024. <a href="https://doi.org/10.4230/LIPIcs.ESA.2024.11">DOI</a>, <a href="https://arxiv.org/abs/2402.13624">arXiv</a></li><li>M. Vernet, Y. Pigné, and É. Sanlaville. <em>A study of connectivity on dynamic graphs: computing persistent connected components.</em> 4OR 21, 2023. <a href="https://doi.org/10.1007/s10288-022-00507-3">DOI</a></li><li>F. Kuhn, N. Lynch, and R. Oshman. <em>Distributed computation in dynamic networks.</em> STOC, 2010. <a href="https://doi.org/10.1145/1806689.1806760">DOI</a></li><li>A. Casteigts, R. Klasing, Y. M. Neggaz, and J. G. Peters. <em>Efficiently testing T-interval connectivity in dynamic graphs.</em> CIAC, 2015. <a href="https://doi.org/10.1007/978-3-319-18173-8_6">DOI</a></li><li>A. E. F. Clementi, C. Macci, A. Monti, F. Pasquale, and R. Silvestri. <em>Flooding time of edge-Markovian evolving graphs.</em> SIAM Journal on Discrete Mathematics 24, 2010. <a href="https://doi.org/10.1137/090756053">DOI</a></li><li>M. Döring. <em>Temporal Graph Wiki.</em> <a href="https://temporalgraph.notion.site/">temporalgraph.notion.site</a></li><li>F. Heeg, J. Sauer, P. Mutzel, and I. Scholtes. <em>Weisfeiler and Leman follow the arrow of time: expressive power of message passing in temporal event graphs.</em> 2025. <a href="https://arxiv.org/abs/2505.24438">arXiv</a></li><li>P. A. Wałęga and M. Rawson. <em>Expressive power of temporal message passing.</em> AAAI, 2025. <a href="https://doi.org/10.1609/aaai.v39i20.35396">DOI</a></li><li>L. Oettershagen, N. M. Kriege, C. Morris, and P. Mutzel. <em>Temporal graph kernels for classifying dissemination processes.</em> SDM, 2020. <a href="https://doi.org/10.1137/1.9781611976236.56">DOI</a>, <a href="https://arxiv.org/abs/1911.05496">arXiv</a></li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../motifs/">« Motifs and reference models</a><a class="docs-footer-nextpage" href="../representations/">Graph representations »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Monday 5 October 2026 17:38">Monday 5 October 2026</span>. Using Julia version 1.13.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
