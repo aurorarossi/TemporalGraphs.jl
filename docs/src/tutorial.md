@@ -44,6 +44,11 @@ The main representation is the [`OrderedEdgeList`](@ref), a chronologically sort
 edge stream. You can build it from a vector of tuples `(u, v, t, tt)` or of
 `TemporalEdge`s, for nodes `1:n`:
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 5, 1), (2, 3, 7, 1), (1, 3, 1, 3)])) # hide
+```
+
 ```jldoctest
 julia> g = OrderedEdgeList(3, [(1, 2, 5, 1), (2, 3, 7, 1), (1, 3, 1, 3)])
 OrderedEdgeList{Int32, Int64} with 3 nodes, 3 temporal edges, time interval (1, 8)
@@ -121,43 +126,50 @@ OrderedEdgeList{Int32, Float64} with 3 nodes, 3 temporal edges, time interval (1
 
 ## Distances
 
+From here on, the examples use the graph `g` of the [quick example](index.md):
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(4, [(1, 4, 1, 5), (1, 2, 2, 1), (1, 2, 5, 2), (3, 2, 6, 1), (4, 3, 6, 2), (2, 4, 7, 2), (4, 3, 8, 1)]); order=[1, 2, 4, 3]) # hide
+```
+
 Temporal distances from a source node come in five flavors (see
 [Temporal paths and distances](distances.md) for the definitions). Each has its own function,
 and [`temporal_distances`](@ref) selects one with a [`DistanceType`](@ref):
 
 ```jldoctest
 julia> earliest_arrival_times(g, 1)
-4-element Vector{Int64}:
+4-element TemporalDistances{Int64}:
  0
  3
  8
  6
 
 julia> minimum_hops(g, 1)
-4-element Vector{Int64}:
+4-element TemporalDistances{Int64}:
  0
  1
  2
  1
 
 julia> temporal_distances(g, 1, MinimumTransitionTimes())
-4-element Vector{Int64}:
+4-element TemporalDistances{Int64}:
  0
  1
  6
  3
 ```
 
-Unreachable nodes get `typemax` of the element type (`INF` for `Int64`, `Inf` for
-`Float64`):
+Unreachable nodes get `typemax` of the element type ([`INF`](@ref) for `Int64`,
+`Inf` for `Float64`), printed as `∞`; test them with `d[v] == INF`:
 
 ```jldoctest
 julia> minimum_durations(g, 3)
-4-element Vector{Int64}:
- 9223372036854775807
-                   1
-                   0
-                   3
+4-element TemporalDistances{Int64}:
+ ∞
+ 1
+ 0
+ 3
 ```
 
 All functions accept a time window as last argument; only edges that depart and
@@ -165,11 +177,11 @@ arrive inside the window are used:
 
 ```jldoctest
 julia> earliest_arrival_times(g, 1, (2, 9))
-4-element Vector{Int64}:
-                   0
-                   3
- 9223372036854775807
-                   9
+4-element TemporalDistances{Int64}:
+ 0
+ 3
+ ∞
+ 9
 ```
 
 ## Paths

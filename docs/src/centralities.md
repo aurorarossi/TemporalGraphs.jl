@@ -24,6 +24,11 @@ can leave ``u`` towards ``v``.
 - [`temporal_closeness_approximation`](@ref) estimates the fastest path closeness of
   all nodes from ``h`` random samples on the reversed graph; the estimate is unbiased.
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 4, 3, 1), (1, 4, 9, 1)])) # hide
+```
+
 ```jldoctest
 julia> using TemporalGraphs
 
@@ -64,6 +69,11 @@ nodes from random target nodes: the contributions of a target to all sources com
 from one scan of the reversed temporal graph. The estimates are unbiased and most
 accurate for the nodes with high closeness, which makes them suited to find the
 top-k nodes.
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 2, 1), (1, 3, 5, 1)], (0, 6))) # hide
+```
 
 ```jldoctest
 julia> using TemporalGraphs
@@ -117,6 +127,11 @@ arrival of ``e``.
 | [`ShortestLatest`](@ref) | latest, then fewest edges |
 | [`ShortestFastest`](@ref) | fastest, then fewest edges |
 | [`PrefixForemost`](@ref) | prefix foremost paths (no waiting constraint) |
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 3, 1), (3, 4, 4, 1), (1, 4, 9, 1), (2, 4, 7, 1)])) # hide
+```
 
 ```jldoctest
 julia> using TemporalGraphs
@@ -177,6 +192,18 @@ the others. If these edges form a cycle that some walk reaches, a walk can go ar
 the cycle any number of times without changing its arrival or departure time, so
 there are infinitely many foremost, latest or fastest walks and an `ArgumentError` is
 thrown; the shortest criteria are always defined.
+
+The non-strict graph, with transition times 0, and the strict one:
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 5, 0), (2, 3, 5, 0)])) # hide
+```
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 5, 1), (2, 3, 5, 1)])) # hide
+```
 
 ```jldoctest
 julia> using TemporalGraphs

@@ -14,6 +14,11 @@ Convert between them with [`to_incident_lists`](@ref), [`to_ordered_edge_list`](
 [`to_trs_graph`](@ref) and [`to_directed_line_graph`](@ref). Distances work on the
 first three representations with the same functions:
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 4, 1), (1, 3, 6, 1)])) # hide
+```
+
 ```jldoctest
 julia> using TemporalGraphs
 
@@ -76,6 +81,11 @@ static *snapshot graphs*, one per time step.
   hours, by moving every edge to the start of its step.
 - [`static_graph`](@ref)`(g, ti)` returns the window graph of the edges in a time
   window.
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 0, 1), (2, 3, 0, 1), (1, 3, 5, 1), (2, 1, 7, 1)])) # hide
+```
 
 ```jldoctest snapshots
 julia> using TemporalGraphs, Graphs

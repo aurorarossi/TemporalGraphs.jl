@@ -81,13 +81,13 @@ end
         a, b = ti
         A = earliest_arrival_matrix(g, ti)
         @test all(A[s, :] == earliest_arrival_times(g, s, ti) for s in 1:n)
-        @test temporal_flooding_times(g, ti) == [temporal_flooding_time(g, s, ti) for s in 1:n]
+        @test temporal_flooding_times(g, ti) == [something(temporal_flooding_time(g, s, ti), typemax(Int)) for s in 1:n]
         gt = temporal_gossip_time(g, ti)
         if is_temporally_connected(g, ti)
             cands = sort(unique([a; [e.t + e.tt for e in es if a <= e.t && e.t + e.tt <= b]]))
             @test gt == cands[findfirst(t -> is_temporally_connected(g, (a, t)), cands)] - a
         else
-            @test gt == typemax(Int)
+            @test gt === nothing
         end
         R = temporal_reachability(g, ti)
         for compressed in (true, false)
@@ -165,7 +165,7 @@ end
     end
     # a path 1 → 2 → 3 floods in 2 time units from 1; gossip is impossible (3 reaches nobody)
     g = OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 2, 1)])
-    @test temporal_flooding_time(g, 1) == 2 && temporal_gossip_time(g) == typemax(Int)
+    @test temporal_flooding_time(g, 1) == 2 && temporal_gossip_time(g) === nothing
     @test source_component(g, 1) == [1, 2, 3] && sink_component(g, 3) == [1, 2, 3] && sink_component(g, [2, 3]) == [1, 2]
     @test_throws ArgumentError edge_expansion(g; β=1, hubs=true)
     @test_throws ArgumentError persistent_components(OrderedEdgeList(2, [(1, 2, 0.5, 0.0)]))

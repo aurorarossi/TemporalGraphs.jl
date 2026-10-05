@@ -37,6 +37,57 @@ In general unreachable nodes get `typemax(T)` (`Inf` for floating point times).
 const INF = typemax(Int64)
 
 """
+    TemporalDistances(A::AbstractArray)
+
+The vector or matrix `A` of distances or times, wrapped without copying, that prints
+the entries of unreachable nodes (`typemax`, i.e. [`INF`](@ref) for `Int64` times, and
+`typemin` for latest departure times) as `∞` and `-∞`. Otherwise it behaves as `A`:
+the entries keep their values, so `d[v] == INF` tests if `v` is unreachable, and
+`parent(d)` returns `A`. Returned by [`temporal_distances`](@ref) and the functions
+based on it, [`earliest_arrival_matrix`](@ref) and [`temporal_flooding_times`](@ref).
+"""
+struct TemporalDistances{T,N,A<:AbstractArray{T,N}} <: AbstractArray{T,N}
+    data::A
+end
+
+Base.parent(d::TemporalDistances) = d.data
+Base.size(d::TemporalDistances) = size(d.data)
+Base.IndexStyle(::Type{<:TemporalDistances{T,N,A}}) where {T,N,A} = IndexStyle(A)
+Base.@propagate_inbounds Base.getindex(d::TemporalDistances, i::Int...) = d.data[i...]
+Base.@propagate_inbounds Base.setindex!(d::TemporalDistances, x, i::Int...) = (d.data[i...] = x; d)
+Base.showarg(io::IO, ::TemporalDistances{T}, toplevel) where {T} = print(io, "TemporalDistances{", T, "}")
+
+# An entry as it is printed, and a lazy array of them for printing a TemporalDistances
+struct _ShownDistance{T}
+    x::T
+end
+_unreachable_sign(x::T) where {T} = x == typemax(T) ? 1 : (typemin(T) < zero(T) && x == typemin(T)) ? -1 : 0
+function Base.show(io::IO, s::_ShownDistance)
+    k = _unreachable_sign(s.x)
+    k == 0 ? show(io, s.x) : print(io, k > 0 ? "∞" : "-∞")
+end
+Base.alignment(io::IO, s::_ShownDistance) =
+    _unreachable_sign(s.x) == 0 ? Base.alignment(io, s.x) : (_unreachable_sign(s.x) > 0 ? (1, 0) : (2, 0))
+
+struct _ShownDistances{T,N,A<:AbstractArray{T,N}} <: AbstractArray{_ShownDistance{T},N}
+    data::A
+end
+Base.size(s::_ShownDistances) = size(s.data)
+Base.IndexStyle(::Type{<:_ShownDistances{T,N,A}}) where {T,N,A} = IndexStyle(A)
+Base.getindex(s::_ShownDistances, i::Int...) = _ShownDistance(s.data[i...])
+
+function Base.show(io::IO, ::MIME"text/plain", d::TemporalDistances{T}) where {T}
+    summary(io, d)
+    isempty(d) && return
+    println(io, ":")
+    Base.print_array(IOContext(io, :typeinfo => T), _ShownDistances(d.data))
+end
+function Base.show(io::IO, d::TemporalDistances)
+    s = _ShownDistances(d.data)
+    show(IOContext(io, :typeinfo => typeof(s)), s)
+end
+
+"""
     TimeInterval{T}
 
 A closed time interval `(a, b)`. Algorithms restricted to `(a, b)` only use edges

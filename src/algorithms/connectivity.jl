@@ -145,8 +145,8 @@ end
 
 Earliest arrival times between all pairs of nodes: `A[s, v]` is the earliest arrival
 time at `v` of a temporal path from `s` inside `ti`, as returned by
-[`earliest_arrival_times`](@ref)`(g, s, ti)`: `typemax` for unreachable nodes and 0
-for `v = s`. Computed with the bitset scan of [`temporal_reachability`](@ref),
+[`earliest_arrival_times`](@ref)`(g, s, ti)`: `typemax` (printed as `∞`) for
+unreachable nodes and 0 for `v = s`. Returned as a [`TemporalDistances`](@ref) matrix. Computed with the bitset scan of [`temporal_reachability`](@ref),
 recording when every source first reaches every node: `O(m n / 64 + n²)` time and
 `O(n²)` memory.
 """
@@ -154,14 +154,14 @@ function earliest_arrival_matrix(g::OrderedEdgeList{V,T}, ti=time_interval(g)) w
     a, b = _interval(T, ti)
     n = num_nodes(g)
     A = fill(typemax(T), n, n)
-    n == 0 && return A
+    n == 0 && return TemporalDistances(A)
     k = clamp(cld(cld(n, 64), 2 * Threads.nthreads()), 1, 8)
     # blocks write disjoint rows of A
     tmap(s0 -> (_reachability_block!(Matrix{UInt64}(undef, k, n), g, s0, a, b, A); nothing), collect(1:64k:n))
     for s in 1:n
         A[s, s] = zero(T)
     end
-    return A
+    return TemporalDistances(A)
 end
 
 """
@@ -170,7 +170,7 @@ end
 Time needed to *flood* `g` from `s` inside `ti = (a, b)`: if `s` knows a piece of
 information at time `a` and every node forwards it on every edge it can use, the time
 from `a` until all nodes know it, i.e., the largest earliest arrival time from `s`
-minus `a` (`typemax` if some node cannot be reached). This is the broadcast time of
+minus `a`, or `nothing` if some node cannot be reached. This is the broadcast time of
 `s` in the flooding model (every informed node transmits on all its edges).
 
 # References
@@ -180,8 +180,8 @@ minus `a` (`typemax` if some node cannot be reached). This is the broadcast time
 function temporal_flooding_time(g::OrderedEdgeList{V,T}, s::Integer, ti=time_interval(g)) where {V,T}
     s = _check_node(g, s)
     a, _ = _interval(T, ti)
-    ea = earliest_arrival_times(g, s, ti)
-    return _flooding(ea, s, a)
+    x = _flooding(earliest_arrival_times(g, s, ti), s, a)
+    return x == typemax(T) ? nothing : x
 end
 
 function _flooding(ea::AbstractVector{T}, s::Int, a::T) where {T}
@@ -197,12 +197,14 @@ end
 """
     temporal_flooding_times(g::OrderedEdgeList, ti = time_interval(g))
 
-[`temporal_flooding_time`](@ref) of every node, from the [`earliest_arrival_matrix`](@ref).
+[`temporal_flooding_time`](@ref) of every node, from the [`earliest_arrival_matrix`](@ref),
+as a [`TemporalDistances`](@ref) vector: `typemax` (printed as `∞`) for the nodes that
+cannot flood `g`.
 """
 function temporal_flooding_times(g::OrderedEdgeList{V,T}, ti=time_interval(g)) where {V,T}
     a, _ = _interval(T, ti)
-    A = earliest_arrival_matrix(g, ti)
-    return [_flooding(view(A, s, :), s, a) for s in 1:num_nodes(g)]
+    A = parent(earliest_arrival_matrix(g, ti))
+    return TemporalDistances([_flooding(view(A, s, :), s, a) for s in 1:num_nodes(g)])
 end
 
 """
@@ -211,13 +213,14 @@ end
 Time needed for *gossiping* in `g` inside `ti = (a, b)`: if every node knows its own
 piece of information at time `a` and all nodes forward everything they know on every
 edge, the time from `a` until every node knows every piece, i.e., the largest
-[`temporal_flooding_time`](@ref) (`typemax` if `g` is not temporally connected
-inside `ti`). Equivalently, `a` plus the gossip time is the earliest `t` such that
+[`temporal_flooding_time`](@ref), or `nothing` if `g` is not temporally connected
+inside `ti`. Equivalently, `a` plus the gossip time is the earliest `t` such that
 `g` restricted to `(a, t)` is temporally connected.
 """
 function temporal_gossip_time(g::OrderedEdgeList{V,T}, ti=time_interval(g)) where {V,T}
     num_nodes(g) <= 1 && return zero(T)
-    return maximum(temporal_flooding_times(g, ti))
+    x = maximum(temporal_flooding_times(g, ti))
+    return x == typemax(T) ? nothing : x
 end
 
 """

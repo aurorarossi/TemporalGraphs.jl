@@ -30,6 +30,11 @@ In this layout:
 - `M[1:2, 3:4]` and `M[3:4, 5:6]` are the eight triangles;
 - the other 24 entries are stars.
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 10, 0), (2, 1, 20, 0), (1, 3, 25, 0), (3, 2, 40, 0), (1, 2, 70, 0)])) # hide
+```
+
 ```jldoctest motifs
 julia> using TemporalGraphs
 

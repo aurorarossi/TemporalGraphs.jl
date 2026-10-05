@@ -14,6 +14,7 @@ TemporalGraphs
 TemporalEdge
 TimeInterval
 INF
+TemporalDistances
 StaticWeightedEdge
 DistanceType
 EarliestArrival

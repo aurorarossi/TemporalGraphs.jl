@@ -20,6 +20,11 @@ Every distance computation has an in-place form. [`distance_workspace`](@ref) cr
 the buffers once, and [`temporal_distances!`](@ref) reuses them; after the buffers
 have grown to their final size, no memory is allocated:
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 4, 3, 1), (1, 4, 9, 1)])) # hide
+```
+
 ```jldoctest
 julia> using TemporalGraphs
 
@@ -34,12 +39,12 @@ julia> for s in 1:num_nodes(g)
            # ... use dist ...
        end
 
-julia> dist
-4-element Vector{Int64}:
- 9223372036854775807
- 9223372036854775807
- 9223372036854775807
-                   0
+julia> TemporalDistances(dist)            # prints unreachable nodes as ∞, without copying
+4-element TemporalDistances{Int64}:
+ ∞
+ ∞
+ ∞
+ 0
 ```
 
 Workspaces reset only the part of the buffers that the previous computation used, so

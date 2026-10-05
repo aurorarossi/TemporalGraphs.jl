@@ -80,6 +80,11 @@ GNNGraphs.jl are available.
   features. A directed GNN on this graph is as expressive as the temporal
   Weisfeiler–Leman test.
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(4, [(1, 2, 0, 1), (2, 3, 0, 1), (1, 3, 5, 1), (2, 1, 7, 1)])) # hide
+```
+
 ```jldoctest gnn
 julia> using TemporalGraphs, GNNGraphs
 

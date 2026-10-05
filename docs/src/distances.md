@@ -31,8 +31,10 @@ compiler generate a specialized algorithm for each of them:
 
 For the source itself the value is 0 (for latest departure the end of the time
 interval). Nodes that cannot be reached get `typemax` of the element type (for
-latest departure `typemin`). Minimum hops are always counted as `Int`; all other
-values have the time type of the graph.
+latest departure `typemin`), which is [`INF`](@ref) for `Int64` times. The results
+are [`TemporalDistances`](@ref) vectors, which print these values as `∞` (`-∞`) and
+otherwise behave as plain vectors. Minimum hops are always counted as `Int`; all
+other values have the time type of the graph.
 
 ## Time windows
 
@@ -40,22 +42,27 @@ Every algorithm takes an optional time interval `(a, b)`, by default the interva
 spanned by the graph. Only edges that depart and arrive inside the window are used,
 i.e. edges with `a ≤ t` and `t + tt ≤ b`:
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 4, 1), (1, 3, 6, 1)])) # hide
+```
+
 ```jldoctest
 julia> using TemporalGraphs
 
 julia> g = OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 4, 1), (1, 3, 6, 1)]);
 
 julia> earliest_arrival_times(g, 1)
-3-element Vector{Int64}:
+3-element TemporalDistances{Int64}:
  0
  2
  5
 
 julia> earliest_arrival_times(g, 1, (0, 4))       # (2 3 4 1) arrives at 5 > 4
-3-element Vector{Int64}:
-                   0
-                   2
- 9223372036854775807
+3-element TemporalDistances{Int64}:
+ 0
+ 2
+ ∞
 ```
 
 ## Algorithms

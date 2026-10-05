@@ -12,8 +12,9 @@ distance_workspace(::TRSGraph, dt::_BetweennessOnly) = _betweenness_only(dt)
 
 Temporal distances of type `dt` from `s` to all nodes of `g` inside the time
 interval `ti`, for an [`OrderedEdgeList`](@ref), [`IncidentLists`](@ref) or
-[`TRSGraph`](@ref). Unreachable nodes get `typemax` of the element type (for
-[`LatestDeparture`](@ref) `typemin`).
+[`TRSGraph`](@ref), as a [`TemporalDistances`](@ref) vector. Unreachable nodes get
+`typemax` of the element type (for [`LatestDeparture`](@ref) `typemin`), printed as
+`∞` (`-∞`).
 
 With a finite `β` (only for an `OrderedEdgeList`) the distances are those of
 *β-restless walks* (Casteigts, Himmel, Molter and Zschoche, 2021), which wait at most
@@ -36,10 +37,11 @@ function temporal_distances(g::_AnyTemporalGraph, s::Integer, dt::DistanceType, 
         g isa OrderedEdgeList || throw(ArgumentError("waiting constraints need an OrderedEdgeList"))
         dt isa _RestlessCriterion || throw(ArgumentError("$(typeof(dt)) does not support waiting constraints"))
         β >= 0 || throw(ArgumentError("β must be non-negative"))
-        return _restless_distances(g, _check_node(g, s), dt, β, ti)::Vector{distance_eltype(g, dt)}
+        return TemporalDistances(_restless_distances(g, _check_node(g, s), dt, β, ti)::Vector{distance_eltype(g, dt)})
     end
     dist = Vector{distance_eltype(g, dt)}(undef, num_nodes(g))
-    return temporal_distances!(dist, distance_workspace(g, dt), g, s, dt, ti)
+    temporal_distances!(dist, distance_workspace(g, dt), g, s, dt, ti)
+    return TemporalDistances(dist)
 end
 
 """

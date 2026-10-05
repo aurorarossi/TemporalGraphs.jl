@@ -35,7 +35,7 @@ import p7zip_jll
 
 export
     # basic types
-    TemporalEdge, TimeInterval, StaticWeightedEdge, INF, time_type, node_type,
+    TemporalEdge, TimeInterval, StaticWeightedEdge, INF, TemporalDistances, time_type, node_type,
     DistanceType, EarliestArrival, Fastest, LatestDeparture, MinimumTransitionTimes, MinimumHops,
     ShortestForemost, ShortestFastest, ShortestLatest, PrefixForemost,
     # representations

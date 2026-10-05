@@ -44,6 +44,11 @@ nodes that reach each other.
 - **Unilateral components.** With `unilateral = true`, it is enough that one node of
   every pair reaches the other.
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(4, [(1, 3, 1, 0), (3, 2, 2, 0), (2, 4, 3, 0), (4, 1, 4, 0)])) # hide
+```
+
 ```jldoctest theory
 julia> using TemporalGraphs
 
@@ -73,11 +78,16 @@ Both are computed from [`earliest_arrival_matrix`](@ref), the earliest arrival t
 between all pairs of nodes. It uses the bitset scan of the reachability matrix and
 records when every source first reaches every node, in `O(m n / 64 + n²)` time.
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 1, 4, 1), (1, 2, 6, 1)])) # hide
+```
+
 ```jldoctest theory
 julia> g = OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 1, 4, 1), (1, 2, 6, 1)]);
 
 julia> earliest_arrival_matrix(g)
-3×3 Matrix{Int64}:
+3×3 TemporalDistances{Int64}:
  0  2  3
  5  0  3
  5  7  0
@@ -111,6 +121,11 @@ polynomial time.
 
 The time steps are the grid of the time interval with the resolution of the time
 stamps:
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(4, [(1, 2, 0, 0), (1, 2, 1, 0), (2, 3, 1, 0), (1, 2, 2, 0), (2, 3, 2, 0), (3, 4, 5, 0)])) # hide
+```
 
 ```jldoctest theory
 julia> c = OrderedEdgeList(4, [(1, 2, 0, 0), (1, 2, 1, 0), (2, 3, 1, 0), (1, 2, 2, 0), (2, 3, 2, 0), (3, 4, 5, 0)]);
@@ -180,11 +195,16 @@ Zschoche, 2021) waits at most `β` at every intermediate node.
 In the example below, the only restless walk from 1 to 5 goes around the cycle
 2 → 3 → 4 → 2, so it is not a path:
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(5, [(1, 2, 1, 0), (2, 3, 2, 0), (3, 4, 3, 0), (4, 2, 4, 0), (2, 5, 5, 0)])) # hide
+```
+
 ```jldoctest theory
 julia> g = OrderedEdgeList(5, [(1, 2, 1, 0), (2, 3, 2, 0), (3, 4, 3, 0), (4, 2, 4, 0), (2, 5, 5, 0)]);
 
 julia> temporal_distances(g, 1, EarliestArrival(); β = 1)
-5-element Vector{Int64}:
+5-element TemporalDistances{Int64}:
  0
  1
  2
@@ -225,6 +245,11 @@ model:
 The example of Kempe, Kleinberg and Kumar has no two vertex-disjoint paths from 1 to
 5, but a minimum vertex separator needs two nodes:
 
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(5, [(1, 2, 1, 1), (2, 1, 1, 1), (2, 3, 2, 1), (3, 2, 2, 1), (3, 5, 3, 1), (5, 3, 3, 1), (2, 4, 4, 1), (4, 2, 4, 1), (1, 3, 5, 1), (3, 1, 5, 1), (3, 4, 6, 1), (4, 3, 6, 1), (4, 5, 7, 1), (5, 4, 7, 1)])) # hide
+```
+
 ```jldoctest theory
 julia> und(es) = reduce(vcat, [[(u, v, t, tt), (v, u, t, tt)] for (u, v, t, tt) in es]);
 
@@ -261,6 +286,11 @@ temporal path. There are two versions:
 
 On random graphs the level-2 approximation was within 0.5% of the optimum on average
 (computed by brute force), and never worse than 1.5 times it.
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(6, [(1, 2, 1, 2), (1, 3, 1, 4), (1, 3, 3, 3), (1, 2, 4, 1), (2, 4, 4, 2), (2, 5, 5, 3), (3, 6, 6, 2), (3, 5, 7, 2)]); order=[1, 3, 2, 4, 5, 6]) # hide
+```
 
 ```jldoctest theory
 julia> g = OrderedEdgeList(6, [(1, 2, 1, 2), (1, 3, 1, 4), (1, 3, 3, 3), (1, 2, 4, 1),
@@ -307,6 +337,23 @@ long as the same time-respecting paths exist. In the example of Figure 2 of the 
 `G3` swaps the times of two edges that lie on no common time-respecting path. The
 paper uses a maximum time difference ``δ = 2`` between consecutive edges with unit
 transition times, which is `β = δ - 1 = 1` here.
+
+The timelines of `G1`, `G3` and `G4`:
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(5, [(1, 2, 1, 1), (2, 4, 2, 1), (3, 4, 3, 1), (4, 5, 4, 1)])) # hide
+```
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(5, [(1, 2, 1, 1), (2, 4, 3, 1), (3, 4, 2, 1), (4, 5, 4, 1)])) # hide
+```
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(5, [(1, 2, 1, 1), (2, 4, 2, 1), (3, 4, 3, 1), (4, 5, 1, 1)])) # hide
+```
 
 ```jldoctest theory
 julia> G(es) = OrderedEdgeList(5, [(u, v, t, 1) for (u, v, t) in es]);

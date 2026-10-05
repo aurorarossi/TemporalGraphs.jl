@@ -71,14 +71,14 @@ julia> g = OrderedEdgeList(4, [(1, 4, 1, 5), (1, 2, 2, 1), (1, 2, 5, 2), (3, 2, 
 OrderedEdgeList{Int32, Int64} with 4 nodes, 7 temporal edges, time interval (1, 9)
 
 julia> earliest_arrival_times(g, 1)      # when can node 1 reach the others?
-4-element Vector{Int64}:
+4-element TemporalDistances{Int64}:
  0
  3
  8
  6
 
 julia> minimum_durations(g, 1)           # how long do the fastest trips take?
-4-element Vector{Int64}:
+4-element TemporalDistances{Int64}:
  0
  1
  7
