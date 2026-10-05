@@ -7,7 +7,7 @@ distances and paths, and ranking nodes by centrality.
 DocTestSetup = quote
     using TemporalGraphs
     g = OrderedEdgeList(4, [(1, 4, 1, 5), (1, 2, 2, 1), (1, 2, 5, 2), (3, 2, 6, 1),
-                            (4, 3, 6, 2), (2, 4, 7, 2), (4, 3, 8, 4)])
+                            (4, 3, 6, 2), (2, 4, 7, 2), (4, 3, 8, 1)])
 end
 ```
 
@@ -144,7 +144,7 @@ julia> temporal_distances(g, 1, MinimumTransitionTimes())
 4-element Vector{Int64}:
  0
  1
- 7
+ 6
  3
 ```
 
@@ -199,7 +199,7 @@ julia> temporal_closeness(g, Fastest())
  1.3928571428571428
  0.5
  1.3333333333333333
- 0.5
+ 1.0
 
 julia> compute_topk_closeness(g, 2, Fastest())       # (node, closeness) pairs
 2-element Vector{Tuple{Int64, Float64}}:
@@ -236,7 +236,7 @@ number of nodes: 4
 number of edges: 7
 number of static edges: 5
 number of time stamps: 6
-number of transition times: 4
+number of transition times: 3
 min. time stamp: 1
 max. time stamp: 8
 min. transition time: 1

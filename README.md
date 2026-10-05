@@ -23,12 +23,21 @@ Pkg.add(url="https://github.com/aurorarossi/TemporalGraphs.jl")
 
 ## Example
 
+A temporal graph with 4 nodes and 7 edges `(u, v, t, tt)`, each leaving `u` at time `t`
+and reaching `v` at time `t + tt`; on the right, the same graph with one timeline per node:
+
+<p align="center">
+  <img src="docs/src/assets/example_graph.svg" alt="The temporal graph of the example" height="220">
+  &nbsp;&nbsp;
+  <img src="docs/src/assets/example_timelines.svg" alt="The timelines of the temporal graph of the example" height="220">
+</p>
+
 ```julia
 using TemporalGraphs
 
 # edges (u, v, t, tt): from u to v, departing at t, arriving at t + tt
 g = OrderedEdgeList(4, [(1, 4, 1, 5), (1, 2, 2, 1), (1, 2, 5, 2), (3, 2, 6, 1),
-                        (4, 3, 6, 2), (2, 4, 7, 2), (4, 3, 8, 4)])
+                        (4, 3, 6, 2), (2, 4, 7, 2), (4, 3, 8, 1)])
 
 earliest_arrival_times(g, 1)          # [0, 3, 8, 6]
 minimum_durations(g, 1)               # [0, 1, 7, 4]
