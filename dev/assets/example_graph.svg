@@ -1,44 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 330" width="480" height="330">
-  <title>Temporal graph of the quick example</title>
-  <!-- the edges (u, v, t, tt) of the quick example in index.md, labelled with (t, tt);
-       grey edges and haloed labels, readable on light and dark backgrounds -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" width="420" height="420">
+  <title>Temporal graph</title>
   <defs>
-    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4"
-            orient="auto-start-reverse">
+    <marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto">
       <path d="M0,0 L10,5 L0,10 Z" fill="#707070"/>
     </marker>
   </defs>
-  <!-- edges -->
-  <g fill="none" stroke="#707070" stroke-width="2.5" marker-end="url(#head)">
-    <path d="M104.1,75.9 Q240,10 375.9,75.9"/>   <!-- (1, 2, 2, 1) -->
-    <path d="M110,90 L370,90"/>                  <!-- (1, 2, 5, 2) -->
-    <path d="M90,110 L90,230"/>                  <!-- (1, 4, 1, 5) -->
-    <path d="M390,230 L390,110"/>                <!-- (3, 2, 6, 1) -->
-    <path d="M372.4,99.4 L107.6,240.6"/>         <!-- (2, 4, 7, 2) -->
-    <path d="M110,250 L370,250"/>                <!-- (4, 3, 6, 2) -->
-    <path d="M104.1,264.1 Q240,330 375.9,264.1"/> <!-- (4, 3, 8, 1) -->
+  <g stroke="#707070" stroke-width="2.5" fill="none" marker-end="url(#head)">
+    <path d="M89.4,65.3 Q210,36 330.6,65.3"/>
+    <path d="M89.4,74.7 Q210,104 330.6,74.7"/>
+    <path d="M70,90 Q70,210 70,330"/>
+    <path d="M350,330 Q350,210 350,90"/>
+    <path d="M335.9,84.1 Q210,210 84.1,335.9"/>
+    <path d="M89.4,354.7 Q210,384 330.6,354.7"/>
+    <path d="M89.4,345.3 Q210,316 330.6,345.3"/>
   </g>
-  <!-- edge labels (t, tt) -->
-  <g font-family="Lato, Helvetica, Arial, sans-serif" font-size="15" fill="#1A1A1A"
-     stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">
-    <text x="240" y="36" text-anchor="middle">(2, 1)</text>
-    <text x="240" y="110" text-anchor="middle">(5, 2)</text>
-    <text x="78" y="175" text-anchor="end">(1, 5)</text>
-    <text x="402" y="175" text-anchor="start">(6, 1)</text>
-    <text x="234" y="159" text-anchor="middle" transform="rotate(-28.07 234 159)">(7, 2)</text>
-    <text x="240" y="242" text-anchor="middle">(6, 2)</text>
-    <text x="240" y="315" text-anchor="middle">(8, 1)</text>
-  </g>
-  <!-- nodes in the Julia colors, as in the logo -->
-  <circle cx="90" cy="90" r="20" fill="#4063D8"/>
-  <circle cx="390" cy="90" r="20" fill="#CB3C33"/>
-  <circle cx="390" cy="250" r="20" fill="#389826"/>
-  <circle cx="90" cy="250" r="20" fill="#9558B2"/>
-  <g font-family="Lato, Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF"
-     text-anchor="middle" dominant-baseline="central">
-    <text x="90" y="90">1</text>
-    <text x="390" y="90">2</text>
-    <text x="390" y="250">3</text>
-    <text x="90" y="250">4</text>
-  </g>
+  <text x="210" y="37.6" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">(2, 1)</text>
+  <text x="210" y="102.4" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">(5, 2)</text>
+  <text x="49" y="210" text-anchor="end" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">(1, 5)</text>
+  <text x="371" y="210" text-anchor="start" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">(6, 1)</text>
+  <text x="200.8" y="200.8" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke" transform="rotate(-45 200.8 200.8)">(7, 2)</text>
+  <text x="210" y="382.4" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">(6, 2)</text>
+  <text x="210" y="317.6" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="Lato, Helvetica, Arial, sans-serif" fill="#1A1A1A" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" paint-order="stroke">(8, 1)</text>
+  <circle cx="70" cy="70" r="20" fill="#4063D8"/>
+  <text x="70" y="70" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="bold" fill="#FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">1</text>
+  <circle cx="350" cy="70" r="20" fill="#CB3C33"/>
+  <text x="350" y="70" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="bold" fill="#FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">2</text>
+  <circle cx="350" cy="350" r="20" fill="#389826"/>
+  <text x="350" y="350" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="bold" fill="#FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">3</text>
+  <circle cx="70" cy="350" r="20" fill="#9558B2"/>
+  <text x="70" y="350" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="bold" fill="#FFFFFF" font-family="Lato, Helvetica, Arial, sans-serif">4</text>
 </svg>
