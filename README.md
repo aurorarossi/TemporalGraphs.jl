@@ -2,6 +2,10 @@
 
 # TemporalGraphs.jl
 
+[![CI](https://github.com/aurorarossi/TemporalGraphs.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/aurorarossi/TemporalGraphs.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://aurorarossi.github.io/TemporalGraphs.jl/dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Fast temporal graph analysis in pure Julia: temporal distances and optimal paths,
 temporal centralities (closeness, betweenness, Katz, PageRank, walk centrality),
 connectivity, flows and spanners, temporal motifs, isomorphisms and randomized models. 
