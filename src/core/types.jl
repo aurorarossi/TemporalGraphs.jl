@@ -112,8 +112,10 @@ end
 
 Abstract supertype of the notions of optimal temporal paths: [`EarliestArrival`](@ref),
 [`Fastest`](@ref), [`LatestDeparture`](@ref), [`MinimumTransitionTimes`](@ref) and
-[`MinimumHops`](@ref). They are singleton types, so the algorithms are specialized
-at compile time for each of them.
+[`MinimumHops`](@ref), and the criteria [`ShortestForemost`](@ref),
+[`ShortestFastest`](@ref), [`ShortestLatest`](@ref) and [`PrefixForemost`](@ref), which
+only select optimal walks for the betweenness. They are singleton types, so the
+algorithms are specialized at compile time for each of them.
 """
 abstract type DistanceType end
 
@@ -130,23 +132,23 @@ struct MinimumHops <: DistanceType end
 
 """
 Shortest foremost walks: earliest arrival, ties broken by the number of edges.
-Only used by [`temporal_betweenness`](@ref) and [`temporal_ego_betweenness`](@ref).
+Only used by the betweenness functions, see [`temporal_betweenness`](@ref).
 """
 struct ShortestForemost <: DistanceType end
 """
 Shortest fastest walks: minimum duration, ties broken by the number of edges.
-Only used by [`temporal_betweenness`](@ref) and [`temporal_ego_betweenness`](@ref).
+Only used by the betweenness functions, see [`temporal_betweenness`](@ref).
 """
 struct ShortestFastest <: DistanceType end
 """
 Shortest latest walks: latest departure, ties broken by the number of edges.
-Only used by [`temporal_betweenness`](@ref) and [`temporal_ego_betweenness`](@ref).
+Only used by the betweenness functions, see [`temporal_betweenness`](@ref).
 """
 struct ShortestLatest <: DistanceType end
 """
 Prefix foremost paths (Buß et al., 2020): foremost paths whose every prefix is also
 foremost, i.e., every node is reached at its earliest arrival time. Only used by
-[`temporal_betweenness`](@ref) and [`temporal_ego_betweenness`](@ref).
+the betweenness functions, see [`temporal_betweenness`](@ref).
 """
 struct PrefixForemost <: DistanceType end
 

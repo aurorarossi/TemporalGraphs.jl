@@ -177,7 +177,8 @@ Sources are processed in parallel.
 particular for foremost, latest and fastest walks, which are rarely unique. Counts
 are kept in `Float64`; if they overflow, the computation is repeated with `BigFloat`
 and a warning is issued. Pass `count_type = BigFloat` to skip the first attempt, or
-`count_type = Rational{BigInt}` for exact values. The accumulations only add
+`count_type = Rational{BigInt}` to count exactly; the betweenness values are returned
+as `Float64` in every case. The accumulations only add
 non-negative numbers (no differences of prefix sums), so the results are accurate
 even when the counts span hundreds of orders of magnitude.
 

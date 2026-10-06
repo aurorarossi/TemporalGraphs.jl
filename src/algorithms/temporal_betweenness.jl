@@ -676,7 +676,10 @@ foremost betweenness requires positive transition times.
 The numbers of optimal walks are counted in `Float64`; if they
 overflow (typical for foremost and fastest walks on large graphs, whose optimal
 walks are very numerous) the computation is repeated with `BigFloat`. Pass
-`count_type = BigFloat` (or `Rational{BigInt}` for exact values) to use it directly.
+`count_type = BigFloat` to use it directly, or `count_type = Rational{BigInt}` to
+count the walks and compute the contribution of every source exactly. The result is
+a `Vector{Float64}` in every case: the contributions are rounded to `Float64` and
+summed.
 
 With `MinimumHops()` and no waiting constraint this is the *shortest temporal
 betweenness* of Buß et al. (KDD 2020), since shortest strict walks are paths. The

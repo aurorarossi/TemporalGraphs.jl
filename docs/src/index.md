@@ -10,7 +10,7 @@ A **temporal graph** extends the notion of a graph to include time, and is a nat
 between users, contacts between people, flights between airports, trades between
 accounts, and many other real-world phenomena. 
 
-There are many ways to represent temporal graphs, in this package all the graphs share that their  **node set is fixed**. The temporal graph has the same nodes `1:n` during its whole time interval, and only the edges change over time.
+There are many ways to represent temporal graphs, in this package all the graphs type share the fact that the **node set is fixed over time**. The temporal graph has the same nodes `1:n` during its whole time interval, and only the edges change over time.
 
 TemporalGraphs.jl provides a collection of algorithms and data structures for temporal graph analysis, including:
 

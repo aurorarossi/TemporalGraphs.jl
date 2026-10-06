@@ -2,7 +2,8 @@ const _AnyTemporalGraph = Union{OrderedEdgeList,IncidentLists,TRSGraph}
 
 # criteria that only define optimal walks for the betweenness
 const _BetweennessOnly = Union{ShortestForemost,ShortestFastest,ShortestLatest,PrefixForemost}
-_betweenness_only(dt) = throw(ArgumentError("$(typeof(dt)) is only supported by temporal_betweenness"))
+_betweenness_only(dt) = throw(ArgumentError("$(typeof(dt)) only selects optimal walks for the betweenness functions " *
+    "(temporal_betweenness, temporal_ego_betweenness and their approximations), not distances"))
 distance_workspace(::OrderedEdgeList, dt::_BetweennessOnly) = _betweenness_only(dt)
 distance_workspace(::IncidentLists, dt::_BetweennessOnly) = _betweenness_only(dt)
 distance_workspace(::TRSGraph, dt::_BetweennessOnly) = _betweenness_only(dt)

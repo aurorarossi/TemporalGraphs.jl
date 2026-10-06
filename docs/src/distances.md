@@ -96,6 +96,55 @@ the optimal paths, see [`minimum_duration_path`](@ref) and the other path functi
 Each returns the vector of edges of one optimal path from `s` to `target`, or an
 empty vector if there is none.
 
+### Refined optimality criteria
+
+When there are several optimal paths, as for counting them in a betweenness
+centrality, four more criteria select some of them. For a path ``P = e_1, \dots, e_k``
+from `s` to `z`, let ``\mathrm{dep}(P) = t_1``, ``\mathrm{arr}(P) = t_k + λ_k`` and
+``|P| = k``:
+
+| Criterion | Optimal paths from `s` to `z` |
+|---|---|
+| [`ShortestForemost`](@ref) | among the paths with the earliest ``\mathrm{arr}(P)``, those with the fewest edges |
+| [`ShortestFastest`](@ref) | among the paths with the smallest ``\mathrm{arr}(P) - \mathrm{dep}(P)``, those with the fewest edges |
+| [`ShortestLatest`](@ref) | among the paths with the latest ``\mathrm{dep}(P)``, those with the fewest edges |
+| [`PrefixForemost`](@ref) | the foremost paths whose every prefix ``e_1, \dots, e_i`` is foremost too, i.e. reaches ``v_i`` at its earliest arrival time (Buß et al., 2020) |
+
+The distance values are those of [`EarliestArrival`](@ref), [`Fastest`](@ref) and
+[`LatestDeparture`](@ref): the criteria change only *which* optimal paths count. For
+this reason they are accepted only by the betweenness functions
+([`temporal_betweenness`](@ref), [`temporal_ego_betweenness`](@ref) and the
+approximations, see [Centralities and statistics](centralities.md)), not by
+[`temporal_distances`](@ref).
+
+In the following graph there are three foremost paths from 1 to 3, all arriving at
+time 6: ``P_1 = (1\,2\,1\,1), (2\,3\,5\,1)``, ``P_2 = (1\,2\,3\,1), (2\,3\,5\,1)`` and
+``P_3 = (1\,3\,5\,1)``. ``P_2`` is not prefix foremost, since its prefix ``(1\,2\,3\,1)``
+reaches 2 at time 4 instead of 2, and only the direct ``P_3`` is shortest foremost:
+
+```@example
+using TemporalGraphs # hide
+draw_timelines(OrderedEdgeList(3, [(1, 2, 1, 1), (1, 2, 3, 1), (2, 3, 5, 1), (1, 3, 5, 1)])) # hide
+```
+
+The betweenness of node 2 is the fraction of the optimal paths from 1 to 3 that pass
+through it: 2/3 (foremost), 1/2 (prefix foremost) and 0 (shortest foremost):
+
+```jldoctest
+julia> using TemporalGraphs
+
+julia> h = OrderedEdgeList(3, [(1, 2, 1, 1), (1, 2, 3, 1), (2, 3, 5, 1), (1, 3, 5, 1)]);
+
+julia> round(temporal_betweenness(h, EarliestArrival())[2]; digits=3)
+0.667
+
+julia> temporal_betweenness(h, PrefixForemost())[2]
+0.5
+
+julia> temporal_betweenness(h, ShortestForemost())[2]
+0.0
+```
+
 ## Reachability
 
 [`number_of_reachable_nodes`](@ref) counts the nodes reachable from a source, the
@@ -103,5 +152,6 @@ source included.
 
 ## References
 
+- S. Buß, H. Molter, R. Niedermeier, and M. Rymar. *Algorithmic aspects of temporal betweenness.* KDD, 2020. [DOI](https://doi.org/10.1145/3394486.3403259), [arXiv](https://arxiv.org/abs/2006.08668)
 - H. Wu, J. Cheng, Y. Ke, S. Huang, Y. Huang, and H. Wu. *Efficient algorithms for temporal path computation.* IEEE Transactions on Knowledge and Data Engineering 28(11), 2016. [DOI](https://doi.org/10.1109/TKDE.2016.2594065)
 - L. Oettershagen and P. Mutzel. *TGLib: an open-source library for temporal graph analysis.* IEEE International Conference on Data Mining Workshops (ICDMW), 2022. [DOI](https://doi.org/10.1109/ICDMW58026.2022.00160), [arXiv](https://arxiv.org/abs/2209.12587)

@@ -14,9 +14,8 @@ end
 ## Temporal edges
 
 A [`TemporalEdge`](@ref) `(u, v, t, tt)` is a directed contact from node `u` to node
-`v` that starts at time `t` and needs the *transition time* `tt`, so it arrives at
-`v` at time `t + tt`. If you do not care about transition times, leave them at the
-default 1.
+`v`, starting at time `t` and taking `tt` time units to traverse it (called *transition time*). The edge is therefore available from `u` at time `t` and reaches
+`v` at time `t + tt`. When transition times are not given, they default to 1. 
 
 ```jldoctest
 julia> e = TemporalEdge(1, 2, 10)        # tt = 1
@@ -40,7 +39,7 @@ TemporalEdge{Int32, Float64}
 
 ## Building a temporal graph
 
-The main representation is the [`OrderedEdgeList`](@ref), a chronologically sorted
+The main representation in this package is the [`OrderedEdgeList`](@ref), a chronologically sorted
 edge stream. You can build it from a vector of tuples `(u, v, t, tt)` or of
 `TemporalEdge`s, for nodes `1:n`:
 
@@ -68,8 +67,7 @@ another one as third argument.
 The nodes `1:n` exist during the whole time interval: only the edges depend on time.
 There is no separate notion of a node joining or leaving the network. A node that has
 no edges at some time is *isolated* then: it is still a node of the graph, but it
-cannot reach or be reached by the others at that time. To model a node that is active
-only during a period, give it edges only during that period.
+cannot reach or be reached by the others at that time.
 
 Results over all nodes therefore include the inactive ones: a graph with a node that
 never has an edge is not temporally connected ([`is_temporally_connected`](@ref)),
@@ -82,7 +80,7 @@ from the edges between them.
 ### From files
 
 [`load_ordered_edge_list`](@ref) reads text files with one edge `u v t [tt]` per
-line, the format of TGLib and of many public datasets (e.g. the
+line, the format of TGLib package and of many public datasets (e.g. the
 [SNAP temporal networks](https://snap.stanford.edu/data/#temporal)). Spaces, tabs and
 commas are accepted as separators and lines starting with `#` or `%` are skipped:
 
