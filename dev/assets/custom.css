@@ -1,0 +1,229 @@
+/* Style of the TemporalGraphs.jl documentation, on top of the Documenter themes.
+   The accent colors are those of the logo (the Julia colors). */
+
+:root {
+  --tg-blue: #4063d8;
+  --tg-button: #4063d8;
+  --tg-red: #cb3c33;
+  --tg-green: #389826;
+  --tg-purple: #9558b2;
+  --tg-border: #e3e3e8;
+  --tg-soft: #f6f7fb;
+  --tg-text-muted: #5a5d68;
+  --tg-shadow: 0 1px 2px rgba(20, 24, 40, 0.06), 0 4px 14px rgba(20, 24, 40, 0.05);
+}
+
+html.theme--documenter-dark,
+html.theme--catppuccin-frappe,
+html.theme--catppuccin-macchiato,
+html.theme--catppuccin-mocha {
+  --tg-blue: #7c95f0;
+  --tg-red: #e5736b;
+  --tg-green: #6cc35a;
+  --tg-purple: #bb8ad6;
+  --tg-border: #3a3f4e;
+  --tg-soft: #262a35;
+  --tg-text-muted: #a9adba;
+  --tg-shadow: none;
+}
+
+/* ---- headings and text ---- */
+
+.content h1 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.content h2 {
+  margin-top: 2.4em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--tg-border);
+}
+
+.content h3 {
+  margin-top: 1.8em;
+}
+
+/* ---- code ---- */
+
+.content pre {
+  border-radius: 8px;
+  font-size: 0.86em;
+  line-height: 1.5;
+}
+
+.content p code,
+.content li code,
+.content td code {
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+/* ---- tables ---- */
+
+.content table {
+  border-collapse: collapse;
+  font-size: 0.93em;
+}
+
+.content table th {
+  background: var(--tg-soft);
+}
+
+.content table th,
+.content table td {
+  padding: 0.45em 0.8em;
+}
+
+/* ---- admonitions ---- */
+
+.content .admonition {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ---- docstrings in the API reference ---- */
+
+.content article.docstring {
+  border-radius: 8px;
+  box-shadow: var(--tg-shadow);
+}
+
+.content article.docstring > header {
+  border-radius: 8px 8px 0 0;
+}
+
+/* ---- figures (timelines and drawings) ---- */
+
+.tg-figure {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.tg-figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---- home page: hero ---- */
+
+.tg-hero {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 1.5rem 0 1.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--tg-border);
+}
+
+.tg-hero-logo {
+  width: 210px;
+  flex-shrink: 0;
+}
+
+.tg-hero-title {
+  font-size: 2.6rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.2rem !important;
+  border: none !important;
+}
+
+.tg-hero-tagline {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+.tg-hero p {
+  color: var(--tg-text-muted);
+}
+
+.tg-hero-buttons p {
+  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.tg-hero-buttons a {
+  display: inline-block;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 1px solid var(--tg-blue);
+  color: var(--tg-blue) !important;
+  text-decoration: none !important;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tg-hero-buttons a:first-child,
+.tg-hero-buttons a:hover {
+  background: var(--tg-button);
+  border-color: var(--tg-button);
+  color: #ffffff !important;
+}
+
+.tg-hero-buttons a:first-child:hover {
+  filter: brightness(1.1);
+}
+
+@media screen and (max-width: 768px) {
+  .tg-hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  .tg-hero-logo {
+    width: 170px;
+  }
+  .tg-hero-buttons p {
+    justify-content: center;
+  }
+}
+
+/* ---- home page: feature cards ---- */
+
+.tg-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 2rem;
+}
+
+.tg-card {
+  border: 1px solid var(--tg-border);
+  border-top: 4px solid var(--tg-blue);
+  border-radius: 10px;
+  padding: 0.9rem 1.05rem 0.8rem;
+  box-shadow: var(--tg-shadow);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.tg-card:hover {
+  transform: translateY(-2px);
+}
+
+.tg-card:nth-child(4n + 2) { border-top-color: var(--tg-red); }
+.tg-card:nth-child(4n + 3) { border-top-color: var(--tg-green); }
+.tg-card:nth-child(4n + 4) { border-top-color: var(--tg-purple); }
+
+.tg-card p {
+  margin: 0 0 0.35rem !important;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--tg-text-muted);
+}
+
+.tg-card p:first-child {
+  font-size: 1.05rem;
+  color: inherit;
+}
+
+.tg-card p:first-child a {
+  text-decoration: none;
+}
