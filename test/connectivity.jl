@@ -171,3 +171,85 @@ end
     @test_throws ArgumentError persistent_components(OrderedEdgeList(2, [(1, 2, 0.5, 0.0)]))
     @test_throws ArgumentError interval_connected_components(g, 0)
 end
+
+@testset "Δ-temporal components, stream components and seed selection" begin
+    rng = MersenneTwister(23)
+    for _ in 1:60
+        n = rand(rng, 1:6)
+        g = OrderedEdgeList(n, [TemporalEdge(rand(rng, 1:n), rand(rng, 1:n), rand(rng, 0:8), rand(rng, 0:2)) for _ in 1:rand(rng, 0:14)])
+        a, b = time_interval(g)
+        subsets = [[i for i in 1:n if (mask >> (i - 1)) & 1 == 1] for mask in 1:(2^n-1)]
+        # Δ-temporal components against all subsets and all windows on the integer grid
+        for Δ in (0, 1, 3, 20), uni in (false, true)
+            Rs = [temporal_reachability(g, (τ, min(τ + Δ, b))) for τ in a:(b - Δ < a ? a : b - Δ)]
+            ok(X) = all(R -> all(uni ? (R[x, y] || R[y, x]) : (R[x, y] && R[y, x]) for x in X, y in X), Rs)
+            good = filter(ok, subsets)
+            maximal = sort([X for X in good if !any(Y -> length(Y) > length(X) && issubset(X, Y), good)]; by=c -> (-length(c), c))
+            @test delta_temporal_connected_components(g, Δ; resolution=1, unilateral=uni) == maximal
+        end
+        @test delta_temporal_connected_components(g, b - a; resolution=1) == temporal_connected_components(g)
+        # stream components against the components of the covered points of the
+        # half-integer grid (doubled to integers), linked within a node if at most
+        # max(gap, 1/2) apart and across an edge at its time stamp
+        ti = rand(rng, Bool) ? (a, b) : (rand(rng, 0:3), rand(rng, 5:10))
+        for gap in (0, 1, 2)
+            es = [e for e in edges(g) if ti[1] <= e.t && e.t + e.tt <= ti[2]]
+            points = unique!(sort!([(v, x) for e in es for v in (e.u, e.v) for x in 2e.t:2(e.t+e.tt)]))
+            id = Dict(p => i for (i, p) in enumerate(points))
+            h = Graphs.SimpleGraph(length(points))
+            for (i, (v, x)) in enumerate(points), (j, (w, y)) in enumerate(points)
+                v == w && 0 < y - x <= max(2gap, 1) && Graphs.add_edge!(h, i, j)
+            end
+            for e in es
+                Graphs.add_edge!(h, id[(e.u, 2e.t)], id[(e.v, 2e.t)])
+            end
+            oracle = zeros(Int, length(points))
+            for (c, comp) in enumerate(Graphs.connected_components(h))
+                oracle[comp] .= c
+            end
+            C = stream_components(g, ti; gap=gap)
+            mine = map(points) do (v, x)
+                cs = [c for (c, comp) in enumerate(C) for (w, (s, f)) in comp if w == v && 2s <= x <= 2f]
+                length(cs) == 1 ? cs[1] : 0
+            end
+            @test all(>(0), mine)
+            @test length(unique(zip(mine, oracle))) == length(C) == length(unique(oracle))
+            @test all(comp -> all(((v, (s, f)),) -> haskey(id, (v, 2s)) && haskey(id, (v, 2f)), comp), C)
+        end
+    end
+    # seed selection against all subsets
+    for _ in 1:60
+        n = rand(rng, 1:8)
+        g = OrderedEdgeList(n, [TemporalEdge(rand(rng, 1:n), rand(rng, 1:n), rand(rng, 0:8), rand(rng, 0:2)) for _ in 1:rand(rng, 0:16)])
+        R = temporal_reachability(g)
+        reach(S) = count(v -> any(s -> R[s, v], S), 1:n)
+        subsets = [[i for i in 1:n if (mask >> (i - 1)) & 1 == 1] for mask in 0:(2^n-1)]
+        opt = minimum(length(S) for S in subsets if reach(S) == n)
+        D = reachability_dominating_set(g)
+        @test reach(D) == n && issorted(D) && allunique(D) && length(D) <= opt * (log(n) + 1)
+        E = reachability_dominating_set(g; exact=true)
+        @test reach(E) == n && length(E) == opt
+        for k in 0:3
+            best = maximum(reach(S) for S in subsets if length(S) <= k)
+            r = max_reach_seeds(g, k)
+            @test r.reached == reach(r.seeds) && length(r.seeds) <= k && r.reached >= (1 - 1 / ℯ) * best
+            x = max_reach_seeds(g, k; exact=true)
+            @test x.reached == best == reach(x.seeds) && length(x.seeds) <= k && issorted(x.seeds)
+        end
+    end
+    g = random_simple_temporal_graph(60, 0.08; rng=rng)
+    D, E = reachability_dominating_set(g), reachability_dominating_set(g; exact=true)
+    R = temporal_reachability(g)
+    @test length(E) <= length(D) && all(v -> any(s -> R[s, v], E), 1:60)
+    @test max_reach_seeds(g, 3; exact=true).reached >= max_reach_seeds(g, 3).reached
+    # a path 1 → 2 → 3 is dominated by 1; node 4 has no edges and must be a seed
+    @test reachability_dominating_set(OrderedEdgeList(3, [(1, 2, 1, 1), (2, 3, 2, 1)])) == [1]
+    @test max_reach_seeds(OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 2, 1)]), 2) == (seeds=[1, 4], reached=4)
+    @test_throws ArgumentError max_reach_seeds(OrderedEdgeList(2, [(1, 2, 1, 1)]), -1)
+    @test_throws ArgumentError delta_temporal_connected_components(OrderedEdgeList(2, [(1, 2, 1, 1)]), -1)
+    @test_throws ArgumentError stream_components(OrderedEdgeList(2, [(1, 2, 1, 1)]); gap=-1)
+    # two meetings of 1 and 2 separated by more than the gap are two temporal nodes each
+    s = OrderedEdgeList(3, [(1, 2, 0, 1), (2, 3, 1, 1), (1, 2, 5, 1)])
+    @test stream_components(s) == [[(1, (0, 1)), (2, (0, 2)), (3, (1, 2))], [(1, (5, 6)), (2, (5, 6))]]
+    @test length(stream_components(s; gap=3)) == 1
+end

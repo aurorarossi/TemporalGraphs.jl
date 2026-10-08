@@ -47,7 +47,11 @@ end
         min. temporal in-degree: 0
         max. temporal in-degree: 3
         min. temporal out-degree: 1
-        max. temporal out-degree: 3"""
+        max. temporal out-degree: 3
+        temporality: 2
+        max. edges per time stamp: 2
+        vertex-interval-membership width: 3
+        edge-interval-membership width: 2"""
 
     mktempdir() do dir
         path = joinpath(dir, "g.tg")

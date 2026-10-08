@@ -3,12 +3,13 @@
 
 A Julia library for temporal graph analysis: temporal distances and paths,
 temporal centralities (closeness, betweenness, Katz, PageRank, walk centrality),
-connectivity, flows, spanners, motifs, isomorphisms, randomized reference models and
-other local and global temporal graph statistics.
+connectivity, flows, spanners, motifs, isomorphisms, randomized reference models,
+generators of temporal graph classes and other local and global temporal graph
+statistics and parameters.
 
 The package was inspired by TGLib (<https://gitlab.com/tgpublic/tglib>, Lutz
-Oettershagen), whose functionality it covers with its own Julia design and
-algorithms.
+Oettershagen and Petra Mutzel), whose functionality it covers with its own Julia
+design and algorithms.
 
 The graph types are parametric in the node id type `V` and the time type `T`
 (integers or floating point numbers). Node ids are 1-based. Every temporal edge
@@ -47,8 +48,9 @@ export
     to_ordered_edge_list, to_incident_lists, to_trs_graph, to_directed_line_graph,
     to_aggregated_edge_list, normalize_graph, scale_timestamps, unit_transition_times,
     make_undirected, static_graph, snapshots, aggregate_time,
-    # statistics and IO
-    TemporalGraphStatistics, get_statistics,
+    # statistics, parameters and IO
+    TemporalGraphStatistics, get_statistics, vertex_interval_membership_width, edge_interval_membership_width,
+    is_simple, is_proper,
     load_ordered_edge_list, load_incident_lists, load_trs_graph, save_ordered_edge_list,
     # drawing
     TemporalGraphDrawing, draw_graph, draw_timelines,
@@ -65,6 +67,9 @@ export
     RandomTimes, InterEventShuffling, TimelineShifting, TimestampShuffling, SequenceShuffling,
     SnapshotShuffling, DegreeSnapshotShuffling, IsomorphicSnapshotShuffling, EventShuffling,
     randomize, reference_samples,
+    # generators
+    random_temporal_graph, random_simple_temporal_graph, random_temporal_labeling, round_robin_temporal_clique,
+    temporal_hypercube, temporal_knodel_graph,
     temporal_reachability, restless_path, is_temporally_connected, temporal_connected_components,
     largest_temporal_connected_component,
     temporal_max_flow, temporal_min_cut, temporal_edge_disjoint_paths, temporal_out_disjoint_paths,
@@ -72,7 +77,8 @@ export
     earliest_arrival_tree, minimum_weight_spanning_tree, temporal_spanner, temporal_clique_spanner,
     earliest_arrival_matrix, temporal_flooding_time, temporal_flooding_times, temporal_gossip_time,
     vertex_expansion, edge_expansion, source_component, sink_component, window_components,
-    persistent_components, interval_connected_components,
+    persistent_components, interval_connected_components, delta_temporal_connected_components, stream_components,
+    reachability_dominating_set, max_reach_seeds,
     augmented_event_graph, temporal_isomorphism, is_temporally_isomorphic, temporal_wl_equivalent,
     temporal_wl_kernel, augmented_event_gnngraph,
     TemporalDataset, temporal_datasets, load_dataset, dataset_dir,
@@ -119,12 +125,14 @@ include("algorithms/cores.jl")
 include("algorithms/motifs.jl")
 include("algorithms/reference_models.jl")
 include("algorithms/connectivity.jl")
+include("algorithms/spreading.jl")
 include("algorithms/restless.jl")
 include("algorithms/flows.jl")
 include("algorithms/trees.jl")
 include("algorithms/expansions.jl")
 include("algorithms/components.jl")
 include("algorithms/isomorphism.jl")
+include("generators.jl")
 include("datasets.jl")
 
 """

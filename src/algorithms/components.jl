@@ -245,3 +245,105 @@ function interval_connected_components(g::OrderedEdgeList{V,TT}, T::Integer, ti=
     end
     return _sorted_components(groups)
 end
+
+"""
+    delta_temporal_connected_components(g::OrderedEdgeList, Δ, ti = time_interval(g);
+                                        resolution = nothing, unilateral = false)
+
+The *Δ-temporal connected components* of `g` (Temporal Graph Wiki): the maximal sets
+of nodes in which every node reaches every other node by a temporal path inside every
+time window `(τ, τ + Δ)` of `ti = (a, b)`, with `τ` on the grid `a, a + r, ...` of the
+time steps (`r` is the `resolution`, as in [`persistent_components`](@ref)) and
+`τ + Δ ≤ b`; if `Δ ≥ b - a` the only window is `ti` and these are the
+[`temporal_connected_components`](@ref). With `unilateral = true`, of every two nodes
+at least one must reach the other in every window. For integer times `Δ` is rounded
+down.
+
+A window is only needed if it starts at `a` or at the first grid point after a time
+stamp: any other window contains all the edges of the last such window before it,
+hence all its paths. The components are the maximal cliques of the graph joining the
+nodes that reach each other in every window, enumerated with the Bron–Kerbosch
+algorithm as for the temporal connected components. `O(K m n / 64)` time for the
+reachability in the `K ≤ m + 1` windows, plus the clique enumeration (exponential in
+the worst case). Returns the components sorted by decreasing size.
+"""
+function delta_temporal_connected_components(g::OrderedEdgeList{V,T}, Δ::Real, ti=time_interval(g);
+                                             resolution=nothing, unilateral::Bool=false) where {V,T}
+    Δ >= 0 || throw(ArgumentError("Δ must be non-negative"))
+    a, b, r, _ = _time_steps(g, ti, resolution)
+    D = T <: Integer ? floor(T, Δ) : convert(T, Δ)
+    last = b - D < a ? a : a + r * fld(b - D - a, r)  # start of the last window
+    starts = T[a]
+    for e in edges(g)
+        a <= e.t < last && push!(starts, a + r * (fld(e.t - a, r) + 1))  # first grid point after e.t
+    end
+    n = num_nodes(g)
+    R = trues(n, n)  # pairs connected in all the windows so far
+    for τ in unique!(sort!(starts))
+        Rw = temporal_reachability(g, (τ, min(τ + D, b)))
+        # unilateral: the direction may change from one window to the next
+        unilateral ? (R .&= Rw .| permutedims(Rw)) : (R .&= Rw)
+        count(R) == n && break  # only the diagonal is left
+    end
+    return _sorted_components(Graphs.maximal_cliques(_component_graph(R, unilateral)))
+end
+
+"""
+    stream_components(g::OrderedEdgeList, ti = time_interval(g); gap = 0)
+
+The connected components of `g` seen as a *stream graph* (Latapy, Viard and Magnien,
+2018), whose elements are temporal nodes instead of nodes. Every edge
+`(u, v, t, tt)` inside `ti` is present during `[t, t + tt]`, and so are its endpoints:
+a node is present while it has an edge, and its presence intervals at most `gap`
+apart are merged (it stays present in between). The temporal nodes are the pairs
+`(v, (s, f))` of a node and a maximal presence interval, and an edge joins the
+temporal nodes of its endpoints that contain it. The order of time and the direction
+of the edges are ignored: a component is a set of temporal nodes linked by edges
+through time, e.g. a group of people that keeps meeting without long interruptions.
+
+Returns the components (vectors of temporal nodes, sorted) sorted by decreasing
+number of temporal nodes; nodes without edges inside `ti` belong to none.
+`O(m log m)` time.
+
+# References
+
+- M. Latapy, T. Viard, and C. Magnien. *Stream graphs and link streams for the modeling of interactions over time.* Social Network Analysis and Mining 8, 2018. [DOI](https://doi.org/10.1007/s13278-018-0537-7), [arXiv](https://arxiv.org/abs/1710.04073)
+"""
+function stream_components(g::OrderedEdgeList{V,T}, ti=time_interval(g); gap::Real=0) where {V,T}
+    gap >= 0 || throw(ArgumentError("gap must be non-negative"))
+    a, b = _interval(T, ti)
+    es = edges(g)
+    ids = _window_edges(g, a, b)
+    at = [Int[] for _ in 1:num_nodes(g)]  # positions in ids of the edges of every node
+    for (x, i) in enumerate(ids)
+        push!(at[es[i].u], x)
+        es[i].v == es[i].u || push!(at[es[i].v], x)
+    end
+    tnodes = Tuple{Int,Tuple{T,T}}[]
+    tu = zeros(Int, length(ids))  # temporal node of the tail and of the head of every edge
+    tv = zeros(Int, length(ids))
+    for v in eachindex(at)
+        xs = sort!(at[v]; by=x -> es[ids[x]].t)
+        k = 1
+        while k <= length(xs)
+            s, f = es[ids[xs[k]]].t, es[ids[xs[k]]].t + es[ids[xs[k]]].tt
+            j = k
+            while j < length(xs) && es[ids[xs[j+1]]].t <= f + gap
+                j += 1
+                f = max(f, es[ids[xs[j]]].t + es[ids[xs[j]]].tt)
+            end
+            push!(tnodes, (v, (s, f)))
+            for x in xs[k:j]
+                es[ids[x]].u == v && (tu[x] = length(tnodes))
+                es[ids[x]].v == v && (tv[x] = length(tnodes))
+            end
+            k = j + 1
+        end
+    end
+    h = Graphs.SimpleGraph(length(tnodes))
+    for x in eachindex(ids)
+        tu[x] == tv[x] || Graphs.add_edge!(h, tu[x], tv[x])
+    end
+    comps = [sort!(tnodes[c]) for c in Graphs.connected_components(h)]
+    return sort!(comps; by=c -> (-length(c), c))
+end

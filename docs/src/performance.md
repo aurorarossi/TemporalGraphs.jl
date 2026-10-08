@@ -39,7 +39,7 @@ julia> for s in 1:num_nodes(g)
            # ... use dist ...
        end
 
-julia> TemporalDistances(dist)            # prints unreachable nodes as ∞, without copying
+julia> TemporalDistances(dist)   # distances from the last source, s = 4; ∞ = unreachable
 4-element TemporalDistances{Int64}:
  ∞
  ∞
@@ -53,13 +53,16 @@ be shared by tasks that run at the same time.
 
 ## Multithreading
 
-Measures that need one computation per node — [`temporal_closeness`](@ref) of all
-nodes, [`temporal_diameter`](@ref), [`temporal_efficiency`](@ref) and
-[`temporal_edge_betweenness`](@ref) — run in parallel with
+Measures that need one computation per node or per sample — for example
+[`temporal_closeness`](@ref) of all nodes, [`temporal_diameter`](@ref),
+[`temporal_efficiency`](@ref), [`temporal_betweenness`](@ref),
+[`temporal_harmonic_closeness`](@ref), [`temporal_reachability`](@ref),
+[`temporal_motif_counts`](@ref), [`reference_samples`](@ref) and the betweenness
+approximations — run in parallel with
 [OhMyThreads.jl](https://github.com/JuliaFolds2/OhMyThreads.jl), with one workspace
 per task. Start Julia with several threads to use them:
 
-```
+```sh
 julia --threads=auto
 ```
 

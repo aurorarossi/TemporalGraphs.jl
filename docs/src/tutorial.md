@@ -14,8 +14,9 @@ end
 ## Temporal edges
 
 A [`TemporalEdge`](@ref) `(u, v, t, tt)` is a directed contact from node `u` to node
-`v`, starting at time `t` and taking `tt` time units to traverse it (called *transition time*). The edge is therefore available from `u` at time `t` and reaches
-`v` at time `t + tt`. When transition times are not given, they default to 1. 
+`v`, starting at time `t` and taking `tt` time units, its *transition time*, to
+traverse. The edge leaves `u` at time `t` and reaches `v` at time `t + tt`. When
+transition times are not given, they default to 1.
 
 ```jldoctest
 julia> e = TemporalEdge(1, 2, 10)        # tt = 1
@@ -41,7 +42,7 @@ TemporalEdge{Int32, Float64}
 
 The main representation in this package is the [`OrderedEdgeList`](@ref), a chronologically sorted
 edge stream. You can build it from a vector of tuples `(u, v, t, tt)` or of
-`TemporalEdge`s, for nodes `1:n`:
+`TemporalEdge`s, for nodes `1:n`. The timelines of the graph built below, one per node:
 
 ```@example
 using TemporalGraphs # hide
@@ -60,7 +61,7 @@ julia> edges(g)                          # sorted by (t, tt, u, v)
 ```
 
 The time interval defaults to `(earliest departure, latest arrival)`; you can pass
-another one as third argument.
+another one as the third argument.
 
 ### Nodes over time
 
@@ -80,7 +81,7 @@ from the edges between them.
 ### From files
 
 [`load_ordered_edge_list`](@ref) reads text files with one edge `u v t [tt]` per
-line, the format of TGLib package and of many public datasets (e.g. the
+line, the format used by TGLib and by many public datasets (e.g. the
 [SNAP temporal networks](https://snap.stanford.edu/data/#temporal)). Spaces, tabs and
 commas are accepted as separators and lines starting with `#` or `%` are skipped:
 
@@ -132,7 +133,7 @@ draw_timelines(OrderedEdgeList(4, [(1, 4, 1, 5), (1, 2, 2, 1), (1, 2, 5, 2), (3,
 ```
 
 Temporal distances from a source node come in five flavors (see
-[Temporal paths and distances](distances.md) for the definitions). Each has its own function,
+[Paths and distances](distances.md) for the definitions). Each has its own function,
 and [`temporal_distances`](@ref) selects one with a [`DistanceType`](@ref):
 
 ```jldoctest
@@ -159,7 +160,8 @@ julia> temporal_distances(g, 1, MinimumTransitionTimes())
 ```
 
 Unreachable nodes get `typemax` of the element type ([`INF`](@ref) for `Int64`,
-`Inf` for `Float64`), printed as `∞`; test them with `d[v] == INF`:
+`Inf` for `Float64`), printed as `∞`; test them with `d[v] == typemax(eltype(d))`, or
+`d[v] == INF` for `Int64` times:
 
 ```jldoctest
 julia> minimum_durations(g, 3)
@@ -170,8 +172,8 @@ julia> minimum_durations(g, 3)
  3
 ```
 
-All functions accept a time window as last argument; only edges that depart and
-arrive inside the window are used:
+All distance and path functions accept a time window as last argument; only edges
+that depart and arrive inside the window are used:
 
 ```jldoctest
 julia> earliest_arrival_times(g, 1, (2, 9))
@@ -220,17 +222,17 @@ julia> temporal_diameter(g, MinimumHops())
 2
 ```
 
-Walk based centralities work on the edge stream directly:
+Walk-based centralities work on the edge stream directly:
 
 ```jldoctest
-julia> temporal_katz_centrality(g, 1.0)
+julia> temporal_katz_centrality(g, 1.0)          # β = 1: walks ending at each node
 4-element Vector{Float64}:
  0.0
  3.0
  8.0
  5.0
 
-julia> temporal_walk_centrality(g, 1.0, 1.0)
+julia> temporal_walk_centrality(g, 1.0, 1.0)     # walks passing through each node
 4-element Vector{Float64}:
  0.0
  6.0
@@ -238,7 +240,8 @@ julia> temporal_walk_centrality(g, 1.0, 1.0)
  6.0
 ```
 
-[`get_statistics`](@ref) summarizes a graph:
+[`get_statistics`](@ref) summarizes a graph, including the temporal graph parameters of
+[Centralities and statistics](@ref "Temporal graph parameters"):
 
 ```jldoctest
 julia> get_statistics(g)
@@ -255,13 +258,17 @@ min. temporal in-degree: 0
 max. temporal in-degree: 3
 min. temporal out-degree: 1
 max. temporal out-degree: 3
+temporality: 2
+max. edges per time stamp: 2
+vertex-interval-membership width: 3
+edge-interval-membership width: 2
 ```
 
 See [Centralities and statistics](centralities.md) for all measures.
 
 ## Drawing
 
-[`draw_graph`](@ref) draws the static graph, with every edge labelled by its
+[`draw_graph`](@ref) draws the static graph, with every edge labeled by its
 `(t, tt)`, and [`draw_timelines`](@ref) draws one timeline per node, with every edge
 going from `u` at time `t` to `v` at time `t + tt`:
 
@@ -282,9 +289,20 @@ They draw every edge, so they are meant for small graphs.
 
 ## Next steps
 
-- [Graph representations](representations.md): when to convert to incident lists or to the
-  time-respecting static graph.
-- [Performance tips](performance.md): in-place computations, multithreading and the choice of representation.
+- [Paths and distances](distances.md): the definitions of the distance types, time
+  windows and the refined optimality criteria.
+- [Centralities and statistics](centralities.md): closeness, betweenness, walk-based
+  centralities, local statistics and temporal graph parameters.
+- [Connectivity, flows and spanners](theory.md): reachability, temporal components,
+  seed selection, restless walks, flows and spanners.
+- [Motifs, reference models and generators](motifs.md): motif counts, null models and
+  random temporal graphs.
+- [Datasets and machine learning](datasets.md): public networks and the integration with
+  MLDatasets.jl and GraphNeuralNetworks.jl.
+- [Graph representations](representations.md): when to convert to incident lists or to
+  the time-respecting static graph.
+- [Performance tips](performance.md): in-place computations, multithreading and the
+  choice of representation.
 
 ```@meta
 DocTestSetup = nothing

@@ -1,7 +1,8 @@
 # Centralities and statistics
 
 In the formulas below ``d(u, v)`` is a temporal distance of the chosen
-[`DistanceType`](@ref) and ``n`` the number of nodes.
+[`DistanceType`](@ref), ``n`` the number of nodes and ``m`` the number of temporal
+edges.
 
 ## Closeness
 
@@ -18,7 +19,7 @@ can leave ``u`` towards ``v``.
 - [`temporal_closeness`](@ref)`(g, s, dt)` computes it for one node and
   `temporal_closeness(g, dt)` for all nodes, in parallel.
 - [`compute_topk_closeness`](@ref) returns the ``k`` nodes with the highest
-  closeness. For fastest and shortest paths it uses the pruning algorithm of
+  closeness. For fastest and minimum transition time paths it uses the pruning algorithm of
   Oettershagen and Mutzel (2020), which stops the computation for a node as soon as an
   upper bound of its closeness drops below the ``k``-th best value found so far.
 - [`temporal_closeness_approximation`](@ref) estimates the fastest path closeness of
@@ -61,7 +62,7 @@ where the *latency* ``ℓ_τ(s, v)`` is the earliest arrival time at ``v`` when 
 Transition times must be positive. The latency is a step function of ``τ`` whose
 steps are the Pareto optimal (earliest arrival, latest departure) pairs of the paths
 from ``s`` to ``v``; these are computed for all ``v`` in one scan of the edges, so
-the integral is exact and the closeness of all nodes takes ``O(nM)`` time (in
+the integral is exact and the closeness of all nodes takes ``O(nm)`` time (in
 parallel). Real-valued times are supported.
 
 [`temporal_harmonic_closeness_approximation`](@ref) estimates the closeness of all
@@ -102,23 +103,40 @@ values are those of [`temporal_harmonic_closeness`](@ref) multiplied by
 - [`temporal_diameter`](@ref): the largest eccentricity.
 - [`temporal_efficiency`](@ref): ``\frac{1}{n(n-1)} \sum_u C(u)``.
 
+### Distance statistics
+
+[`temporal_distance_statistics`](@ref) computes the diameter, the effective diameter
+(the `τ` quantile of the lengths), the temporal connectivity rate (the fraction of
+connected ordered pairs) and the average length of the shortest, shortest foremost
+or prefix foremost paths, either exactly or, as in Algorithm 2 of Cruciani (2024),
+from a sample of source nodes.
+
+```jldoctest
+julia> using TemporalGraphs
+
+julia> g = OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 4, 3, 1), (1, 4, 9, 1)]);
+
+julia> temporal_distance_statistics(g)
+(diameter = 2, effective_diameter = 2, connectivity_rate = 0.5, average_distance = 1.3333333333333333)
+```
+
 ## Temporal betweenness
 
 [`temporal_betweenness`](@ref) computes the betweenness of all nodes for optimal
 temporal *walks* (Brunelli, Crescenzi and Viennot, 2024):
 
 ```math
-B(u) = \sum_{s \neq u,\; t \neq u,\; s \neq t} \frac{σ_{s,t}(u)}{σ_{s,t}},
+B(u) = \sum_{s \neq u,\; z \neq u,\; s \neq z} \frac{σ_{s,z}(u)}{σ_{s,z}},
 ```
 
-where ``σ_{s,t}`` is the number of optimal walks from ``s`` to ``t`` and
-``σ_{s,t}(u)`` the number of those passing through ``u``, counted with multiplicity
+where ``σ_{s,z}`` is the number of optimal walks from ``s`` to ``z`` and
+``σ_{s,z}(u)`` the number of those passing through ``u``, counted with multiplicity
 (a walk through ``u`` twice counts twice). Walks can be *restless*: with a waiting
 constraint `β`, the edge after an edge ``e`` must depart within `β` time units of the
 arrival of ``e``.
 
 | Criterion | Optimal walks |
-|---|---|
+|:---|:---|
 | [`MinimumHops`](@ref) | fewest edges (shortest) |
 | [`EarliestArrival`](@ref) | earliest arrival (foremost) |
 | [`LatestDeparture`](@ref) | latest departure (latest) |
@@ -126,7 +144,7 @@ arrival of ``e``.
 | [`ShortestForemost`](@ref) | foremost, then fewest edges |
 | [`ShortestLatest`](@ref) | latest, then fewest edges |
 | [`ShortestFastest`](@ref) | fastest, then fewest edges |
-| [`PrefixForemost`](@ref) | prefix foremost paths (no waiting constraint) |
+| [`PrefixForemost`](@ref) | prefix foremost paths (no waiting constraint, positive transition times) |
 
 ```@example
 using TemporalGraphs # hide
@@ -136,7 +154,8 @@ draw_timelines(OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 3, 1), (3, 4, 4, 1), (1,
 ```jldoctest
 julia> using TemporalGraphs
 
-julia> g = OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 3, 1), (3, 4, 4, 1), (1, 4, 9, 1), (2, 4, 7, 1)]);
+julia> g = OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 3, 1), (3, 4, 4, 1),
+                               (1, 4, 9, 1), (2, 4, 7, 1)]);
 
 julia> temporal_betweenness(g)                       # shortest walks
 4-element Vector{Float64}:
@@ -161,16 +180,16 @@ julia> temporal_betweenness(g, EarliestArrival(); β=0)   # no waiting allowed
 ```
 
 With [`MinimumHops`](@ref) and no waiting constraint this is the *shortest temporal
-betweenness* of Buß et al. (2020) used in TSBProxy, since shortest strict walks are
-paths.
+betweenness* of Buß et al. (2020), also computed by the TSBProxy tool of Becker et al.
+(2023), since shortest strict walks are paths.
 
 **Algorithm.** For every source the algorithm makes one forward pass over the edges
 by departure time, counting the optimal walks that end with each edge, and one
 backward pass accumulating the dependencies of the edges. Without waiting constraint
 the best predecessors of the outgoing edges of a node improve monotonically, so the
 successors of an edge form a contiguous block and each edge is processed in constant
-time: ``O(nM)`` in total. With a waiting constraint the predecessors form a sliding
-window of arrival times (a monotone deque), and ``O(nM \log M)`` time is needed.
+time: ``O(nm)`` in total. With a waiting constraint the predecessors form a sliding
+window of arrival times (a monotone deque), and ``O(nm \log m)`` time is needed.
 Sources are processed in parallel.
 
 **Numbers of walks.** The number of optimal walks can be astronomically large, in
@@ -186,7 +205,9 @@ even when the counts span hundreds of orders of magnitude.
 on integer times, transition time 1 gives the strict walks of Buß et al. and of
 Brunelli et al., where consecutive edges have increasing time stamps. Transition time
 0 gives the *non-strict* walks of Zhang et al. (2024), where consecutive edges can
-have the same time stamp; both kinds of edges can be mixed. The edges with
+have the same time stamp; both kinds of edges can be mixed.
+
+The edges with
 transition time 0 and the same time stamp are processed as a block: by Dijkstra's
 algorithm on the numbers of edges for the shortest criteria, in topological order for
 the others. If these edges form a cycle that some walk reaches, a walk can go around
@@ -209,7 +230,7 @@ draw_timelines(OrderedEdgeList(3, [(1, 2, 5, 1), (2, 3, 5, 1)])) # hide
 ```jldoctest
 julia> using TemporalGraphs
 
-julia> g = OrderedEdgeList(3, [(1, 2, 5, 0), (2, 3, 5, 0)]);   # non-strict: 1 → 2 → 3 at time 5
+julia> g = OrderedEdgeList(3, [(1, 2, 5, 0), (2, 3, 5, 0)]);   # non-strict: 1 → 2 → 3
 
 julia> temporal_betweenness(g)
 3-element Vector{Float64}:
@@ -227,7 +248,7 @@ julia> temporal_betweenness(OrderedEdgeList(3, [(1, 2, 5, 1), (2, 3, 5, 1)]))   
 **Latest walks.** Latest walks are the only optimal walks that can visit their target
 more than once. As in Fact 3 of Brunelli et al., these earlier visits count as
 passages through the target. Note that on the example of Figure 1 of the paper the
-program TWBC and Table 2 give values for the latest and shortest latest criteria
+authors' program TWBC and Table 2 give values for the latest and shortest latest criteria
 that differ from the definition (and from a brute-force enumeration of the walks);
 all other criteria agree exactly with TWBC.
 
@@ -239,16 +260,15 @@ Kodric (2023) compare cheaper proxies for the shortest temporal betweenness rank
 - [`temporal_betweenness`](@ref)`(g, PrefixForemost())`: the prefix foremost
   betweenness of Buß et al., for paths whose every prefix is foremost. The prefix
   foremost paths from a source form a DAG ordered by earliest arrival times, so this
-  takes ``O(M)`` time per source.
+  takes ``O(m)`` time per source.
 - [`temporal_ego_betweenness`](@ref): the betweenness of each node in its *ego
   network*, the subgraph induced by the node and its neighbors (any criterion).
 - [`temporal_pass_through_degree`](@ref): the square root of the number of pairs of
-  neighbors that are temporally connected through the node, in ``O(M \log M)`` time.
+  neighbors that are temporally connected through the node, in ``O(m \log m)`` time.
 - [`temporal_betweenness_approximation`](@ref): the ONBRA estimator of Santoro and
   Sarpe (2022), which samples pairs of nodes and returns unbiased estimates of the
   normalized betweenness ``B(u) / (n(n-1))`` together with an error bound that holds
   with probability ``1 - η`` (empirical Bernstein bound).
-
 - [`temporal_betweenness_mantra`](@ref): the MANTRA progressive sampling algorithm of
   Cruciani (2024), for shortest, shortest foremost and prefix foremost paths. It
   returns estimates of the normalized betweenness that are within a target error
@@ -256,8 +276,8 @@ Kodric (2023) compare cheaper proxies for the shortest temporal betweenness rank
   fixed in advance: after a bootstrap phase that bounds the variance of the
   estimators and the average path length, the sample grows until a bound on the
   maximum error computed from Monte Carlo empirical Rademacher averages drops below
-  `ε`. Pairs of nodes (as in ONBRA) or single sources can be sampled.
-
+  `ε`. Pairs of nodes (`estimator = :pairs`, as in ONBRA) or single sources
+  (`estimator = :sources`) can be sampled.
 - [`temporal_betweenness_atbc`](@ref): the ATBC progressive sampling algorithm of
   Zhang et al. (2024), for shortest, foremost, fastest and shortest foremost walks,
   strict or non-strict. It samples pairs of nodes until the bound of Riondato and
@@ -274,23 +294,6 @@ r.samples        # number of samples used
 The static betweenness of the underlying graph, another proxy, is available through
 Graphs.jl: `Graphs.betweenness_centrality(static_graph(g))`.
 
-### Distance statistics
-
-[`temporal_distance_statistics`](@ref) computes the diameter, the effective diameter
-(the `τ` quantile of the lengths), the temporal connectivity rate (the fraction of
-connected ordered pairs) and the average length of the shortest, shortest foremost
-or prefix foremost paths, either exactly or, as in Algorithm 2 of Cruciani (2024),
-from a sample of source nodes.
-
-```jldoctest
-julia> using TemporalGraphs
-
-julia> g = OrderedEdgeList(4, [(1, 2, 1, 1), (2, 3, 2, 1), (3, 4, 3, 1), (1, 4, 9, 1)]);
-
-julia> temporal_distance_statistics(g)
-(diameter = 2, effective_diameter = 2, connectivity_rate = 0.5, average_distance = 1.3333333333333333)
-```
-
 ## Edge betweenness
 
 [`temporal_edge_betweenness`](@ref) computes, for every temporal edge, the sum over
@@ -298,10 +301,12 @@ all pairs of edges ``(e, f)`` of the fraction of minimum hop temporal paths from
 ``e`` to ``f`` that pass through it. It runs Brandes' algorithm on the
 [`DirectedLineGraph`](@ref), whose nodes are the temporal edges.
 
-## Walk based centralities
+## Walk-based centralities
 
-A *temporal walk* is a sequence of edges ``e_1, \dots, e_k`` with ``e_{i+1}``
-leaving the head of ``e_i`` and strictly increasing time stamps.
+Here a *temporal walk* is a sequence of edges ``e_1, \dots, e_k`` with ``e_{i+1}``
+leaving the head of ``e_i`` and strictly increasing time stamps. Unlike the rest of
+the package, these measures follow their papers and ignore the transition times, and
+``α``, ``β`` and ``γ`` are weights, not waiting times.
 
 - [`temporal_katz_centrality`](@ref)`(g, β)`: ``\sum_{W} β^{|W|}`` over all walks
   ending at the node (Béres et al., 2018).
@@ -310,7 +315,8 @@ leaving the head of ``e_i`` and strictly increasing time stamps.
   ``β`` per edge (Oettershagen, Mutzel and Kriege, 2022). The implementation runs in
   ``O(n + m)`` time.
 - [`temporal_pagerank`](@ref)`(g, α, β, γ)`: temporal PageRank (Rozenshtein and
-  Gionis, 2016).
+  Gionis, 2016) as in TGLib, with restart probability ``1 - α``, transition
+  probability ``β`` and decay ``γ``.
 
 ## Local statistics
 
@@ -321,11 +327,52 @@ leaving the head of ``e_i`` and strictly increasing time stamps.
   time window.
 - [`topological_overlap`](@ref): mean overlap ``|A ∩ B| / \sqrt{|A||B|}`` of the
   out-neighborhoods at consecutive time stamps.
-- [`get_statistics`](@ref): numbers of nodes, edges, time stamps and degree ranges.
+
+The last two take [`IncidentLists`](@ref): call them on `to_incident_lists(g)`.
+- [`get_statistics`](@ref): numbers of nodes, edges, time stamps and degree ranges,
+  and the temporal graph parameters below.
+
+## Temporal graph parameters
+
+Many problems that are easy on static graphs are NP-hard on temporal graphs, even on
+trees or stars. Temporal graph parameters measure how complex the structure over time
+is, and many problems become tractable when one of them is small (see the
+*Parameters* page of the [Temporal Graph Wiki](https://temporalgraph.notion.site/)).
+[`get_statistics`](@ref) reports:
+
+- the number of distinct time stamps (often called the *lifetime*, although in the
+  literature the lifetime is usually the largest time label);
+- the *temporality*, the largest number of time stamps of a static edge (Mertzios,
+  Michail and Spirakis, 2019);
+- the largest number of temporal edges with the same time stamp;
+- [`vertex_interval_membership_width`](@ref) (Bumpus and Meeks, 2023): every node is
+  active from its first to its last time stamp, and the width is the largest number of
+  nodes active at the same time. [`edge_interval_membership_width`](@ref) is the same
+  for static edges.
+
+[`is_simple`](@ref) (one time stamp per static edge) and [`is_proper`](@ref) (adjacent
+static edges never share a time stamp) test two of the *settings* of temporal graphs
+(Casteigts, Corsini and Sarkar, 2024). For undirected graphs stored with both
+directions, pass `directed = false`:
+
+```jldoctest
+julia> using TemporalGraphs
+
+julia> h = temporal_hypercube(3);   # the edges along dimension k have time k
+
+julia> is_simple(h; directed = false), is_proper(h; directed = false), is_proper(h)
+(true, true, false)
+
+julia> r = round_robin_temporal_clique(6);   # one matching per time stamp
+
+julia> vertex_interval_membership_width(r), edge_interval_membership_width(r; directed=false)
+(6, 3)
+```
 
 ## Cores
 
-- [`kcores`](@ref): core numbers of a static graph (via `Graphs.core_number`).
+- [`kcores`](@ref): core numbers of the static graph given by a list of edges (via
+  `Graphs.core_number`).
 - [`temporal_khcores`](@ref): ``(k, h)``-cores, the cores of the graph of the node
   pairs with at least ``h`` contacts (Wu et al., 2015).
 - [`temporal_lkcores`](@ref): the largest ``(L, k)``-lasting core, a set of nodes
@@ -345,5 +392,8 @@ leaving the head of ``e_i`` and strictly increasing time stamps.
 - F. Béres, R. Pálovics, A. Oláh, and A. A. Benczúr. *Temporal walk based centrality metric for graph streams.* Applied Network Science 3, 2018. [DOI](https://doi.org/10.1007/s41109-018-0080-5)
 - L. Oettershagen, P. Mutzel, and N. M. Kriege. *Temporal walk centrality: ranking nodes in evolving networks.* The Web Conference (WWW), 2022. [DOI](https://doi.org/10.1145/3485447.3512210), [arXiv](https://arxiv.org/abs/2202.03706)
 - P. Rozenshtein and A. Gionis. *Temporal PageRank.* ECML PKDD, 2016. [DOI](https://doi.org/10.1007/978-3-319-46227-1_42)
+- G. B. Mertzios, O. Michail, and P. G. Spirakis. *Temporal network optimization subject to connectivity constraints.* Algorithmica 81(4), 2019. [DOI](https://doi.org/10.1007/s00453-018-0478-6), [arXiv](https://arxiv.org/abs/1502.04382)
+- B. M. Bumpus and K. Meeks. *Edge exploration of temporal graphs.* Algorithmica 85, 2023. [DOI](https://doi.org/10.1007/s00453-022-01018-7), [arXiv](https://arxiv.org/abs/2103.05387)
+- A. Casteigts, T. Corsini, and W. Sarkar. *Simple, strict, proper, happy: a study of reachability in temporal graphs.* Theoretical Computer Science 991, 2024. [DOI](https://doi.org/10.1016/j.tcs.2024.114434), [arXiv](https://arxiv.org/abs/2208.01720)
 - H. Wu, J. Cheng, Y. Lu, Y. Ke, Y. Huang, D. Yan, and H. Wu. *Core decomposition in large temporal graphs.* IEEE International Conference on Big Data, 2015. [DOI](https://doi.org/10.1109/BigData.2015.7363809)
 - W.-C. Hung and C.-Y. Tseng. *Maximum (L, K)-lasting cores in temporal social networks.* DASFAA, 2021. [DOI](https://doi.org/10.1007/978-3-030-73216-5_23)

@@ -8,15 +8,25 @@
 
 Fast temporal graph analysis in pure Julia: temporal distances and optimal paths,
 temporal centralities (closeness, betweenness, Katz, PageRank, walk centrality),
-connectivity, flows and spanners, temporal motifs, isomorphisms and randomized models. 
-Public temporal networks (SNAP, SocioPatterns) can be downloaded
-directly, the temporal datasets of MLDatasets.jl can be loaded as temporal graphs, and
-temporal graphs can be converted to GNNGraphs for GraphNeuralNetworks.jl.
-The node set is fixed: only the edges change over time, and a node without edges at
-some time is isolated then.
+connectivity and temporal components, seed selection, flows and spanners, temporal
+motifs, isomorphisms, randomized reference models, generators of temporal graph
+classes and temporal graph parameters.
+
+Public temporal networks (SNAP, SocioPatterns) can be downloaded directly, the
+temporal datasets of MLDatasets.jl can be loaded as temporal graphs, and temporal
+graphs can be converted to GNNGraphs for GraphNeuralNetworks.jl. The node set is
+fixed: only the edges change over time, and a node without edges at some time is
+isolated at that time.
+
+**Documentation:** [Getting started](https://aurorarossi.github.io/TemporalGraphs.jl/dev/tutorial/)
+· [Manual](https://aurorarossi.github.io/TemporalGraphs.jl/dev/)
+· [API reference](https://aurorarossi.github.io/TemporalGraphs.jl/dev/api/)
 
 TemporalGraphs.jl is inspired by [TGLib](https://gitlab.com/tgpublic/tglib) (C++/Python,
-Lutz Oettershagen and Petra Mutzel) and was built with the help of the Claude Opus 5.5 model.
+Lutz Oettershagen and Petra Mutzel).
+
+
+> The code of TemporalGraphs.jl was written by Claude Opus 5.5, with the help of a human.
 
 ## Installation
 

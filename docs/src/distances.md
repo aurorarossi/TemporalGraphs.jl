@@ -1,10 +1,11 @@
-# Temporal paths and distances
+# Paths and distances
 
 ## Temporal paths
 
 A **temporal path** (or journey) from `s` to `z` is a sequence of temporal edges
 ``e_1 = (s, v_1, t_1, λ_1), e_2 = (v_1, v_2, t_2, λ_2), \dots, e_k = (v_{k-1}, z, t_k, λ_k)``
-in which every edge starts after the previous one has arrived:
+in which every edge departs no earlier than the previous one arrives (``λ_i`` is the
+transition time `tt` of ``e_i``):
 
 ```math
 t_{i+1} \geq t_i + λ_i \quad \text{for } 1 \leq i < k.
@@ -13,8 +14,15 @@ t_{i+1} \geq t_i + λ_i \quad \text{for } 1 \leq i < k.
 It departs at ``t_1``, arrives at ``t_k + λ_k``, has **duration**
 ``t_k + λ_k - t_1``, **length** ``k`` and **transition time** ``\sum_i λ_i``.
 
-Waiting at a node is allowed for any amount of time. Edges with transition time 0
-are supported: several of them can be traversed at the same time stamp.
+Waiting at a node is allowed for any amount of time, unless a waiting constraint `β` is
+passed to [`temporal_distances`](@ref) (see [Waiting constraints: restless walks and
+paths](@ref)). Edges with transition time 0 are supported: several of them can be
+traversed at the same time stamp.
+
+!!! info "Strict and non-strict paths"
+    Positive transition times give *strict* paths, which use at most one edge per time
+    stamp; transition times 0 give *non-strict* paths, which can chain several edges
+    with the same time stamp. The same convention holds in the whole package.
 
 ## Distance types
 
@@ -22,11 +30,11 @@ The distance type is chosen with a singleton [`DistanceType`](@ref), which lets 
 compiler generate a specialized algorithm for each of them:
 
 | Distance type | Optimal path | Value for node `v` | Function |
-|---|---|---|---|
+|:---|:---|:---|:---|
 | [`EarliestArrival`](@ref) | arrives first | arrival time | [`earliest_arrival_times`](@ref) |
 | [`LatestDeparture`](@ref) | leaves the source last | departure time | [`latest_departure_times`](@ref) |
-| [`Fastest`](@ref) | shortest duration | duration | [`minimum_durations`](@ref) |
-| [`MinimumTransitionTimes`](@ref) | smallest sum of transition times ("shortest") | sum of transition times | [`minimum_transition_times`](@ref) |
+| [`Fastest`](@ref) | smallest duration | duration | [`minimum_durations`](@ref) |
+| [`MinimumTransitionTimes`](@ref) | smallest sum of transition times | sum of transition times | [`minimum_transition_times`](@ref) |
 | [`MinimumHops`](@ref) | fewest edges | number of edges | [`minimum_hops`](@ref) |
 
 For the source itself the value is 0 (for latest departure the end of the time
@@ -35,6 +43,13 @@ latest departure `typemin`), which is [`INF`](@ref) for `Int64` times. The resul
 are [`TemporalDistances`](@ref) vectors, which print these values as `∞` (`-∞`) and
 otherwise behave as plain vectors. Minimum hops are always counted as `Int`; all
 other values have the time type of the graph.
+
+!!! note "What does “shortest” mean?"
+    TGLib calls the minimum transition time paths *shortest* paths. In the betweenness
+    literature, and in the criteria [`ShortestForemost`](@ref), [`ShortestFastest`](@ref)
+    and [`ShortestLatest`](@ref), *shortest* means *with the fewest edges*, i.e.
+    [`MinimumHops`](@ref). This documentation says *minimum transition time* for the
+    former and *shortest* only for the latter.
 
 ## Time windows
 
@@ -67,16 +82,16 @@ julia> earliest_arrival_times(g, 1, (0, 4))       # (2 3 4 1) arrives at 5 > 4
 
 ## Algorithms
 
-| Representation | Earliest arrival | Fastest, latest departure, shortest, minimum hops |
-|---|---|---|
+| Representation | Earliest arrival | Other distance types |
+|:---|:---|:---|
 | [`OrderedEdgeList`](@ref) | one scan over the edges | one scan, Pareto fronts of labels per node |
 | [`IncidentLists`](@ref) | Dijkstra's algorithm | label setting (Dijkstra on labels) |
-| [`TRSGraph`](@ref) | depth-first search | depth-first search (fastest), Dijkstra (shortest, hops) |
+| [`TRSGraph`](@ref) | depth-first search | depth-first search (fastest), Dijkstra (minimum transition times, hops); no latest departure |
 
-The edge stream algorithms (Wu et al., 2016) are usually the fastest. They keep for
+The edge stream algorithms (Wu et al., 2016) are usually the quickest. They keep for
 every node the non-dominated pairs *(arrival time, cost)* in a sorted vector; since
-the edges are scanned in chronological order, labels older than the one used by the
-last query are discarded. Edges with transition time 0 at the same time stamp are
+the edges are scanned in chronological order, the labels that a query has passed over
+are never needed again and are discarded. Edges with transition time 0 at the same time stamp are
 scanned repeatedly until nothing changes, so they are handled correctly (a single
 pass, as in TGLib, misses paths through several such edges).
 
@@ -87,16 +102,16 @@ the optimal paths, see [`minimum_duration_path`](@ref) and the other path functi
 ## Paths
 
 | Distance type | Function |
-|---|---|
+|:---|:---|
 | earliest arrival | [`earliest_arrival_path`](@ref) |
 | fastest | [`minimum_duration_path`](@ref) |
-| shortest | [`minimum_transition_time_path`](@ref) |
+| minimum transition times | [`minimum_transition_time_path`](@ref) |
 | minimum hops | [`minimum_hops_path`](@ref) |
 
 Each returns the vector of edges of one optimal path from `s` to `target`, or an
 empty vector if there is none.
 
-### Refined optimality criteria
+## Refined optimality criteria
 
 When there are several optimal paths, as for counting them in a betweenness
 centrality, four more criteria select some of them. For a path ``P = e_1, \dots, e_k``
@@ -104,7 +119,7 @@ from `s` to `z`, let ``\mathrm{dep}(P) = t_1``, ``\mathrm{arr}(P) = t_k + λ_k``
 ``|P| = k``:
 
 | Criterion | Optimal paths from `s` to `z` |
-|---|---|
+|:---|:---|
 | [`ShortestForemost`](@ref) | among the paths with the earliest ``\mathrm{arr}(P)``, those with the fewest edges |
 | [`ShortestFastest`](@ref) | among the paths with the smallest ``\mathrm{arr}(P) - \mathrm{dep}(P)``, those with the fewest edges |
 | [`ShortestLatest`](@ref) | among the paths with the latest ``\mathrm{dep}(P)``, those with the fewest edges |
@@ -148,7 +163,9 @@ julia> temporal_betweenness(h, ShortestForemost())[2]
 ## Reachability
 
 [`number_of_reachable_nodes`](@ref) counts the nodes reachable from a source, the
-source included.
+source included. The reachability between all pairs of nodes, computed 64 sources at a
+time with bitsets, is [`temporal_reachability`](@ref); see [Reachability and temporal
+components](@ref).
 
 ## References
 

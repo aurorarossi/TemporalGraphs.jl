@@ -24,7 +24,7 @@ source. Every edge gets the transition time `transition_time`, which defaults to
 SocioPatterns contacts are undirected, so they are loaded in both directions.
 
 | Name | Source | Directed | Description | License |
-|---|---|---|---|---|
+|:---|:---|:---|:---|:---|
 | `CollegeMsg` | SNAP | yes | Private messages on an online social network at the University of California, Irvine (1,899 nodes, 59,835 edges, 193 days). | SNAP |
 | `email-Eu-core-temporal` | SNAP | yes | Emails between members of a European research institution (986 nodes, 332,334 edges, 803 days). | SNAP |
 | `email-Eu-core-temporal-Dept1` | SNAP | yes | Emails inside department 1 of a European research institution. | SNAP |
@@ -113,8 +113,9 @@ julia> a.num_nodes, size(a.ndata.x)
 
 After `using MLDatasets`, the graph containers of MLDatasets.jl can be converted.
 
-- `OrderedEdgeList(tg::MLDatasets.TemporalSnapshotsGraph, times)` converts a
-  sequence of snapshots, for example the 1,000 brain networks of `TemporalBrains()`.
+- `OrderedEdgeList(tg::MLDatasets.TemporalSnapshotsGraph, times = 1:tg.num_snapshots)`
+  converts a sequence of snapshots, for example the 1,000 brain networks of
+  `TemporalBrains()` (a 1.6 GB download).
   `MLDatasets.TemporalSnapshotsGraph(g; resolution)` converts the other way.
 - `OrderedEdgeList(g::MLDatasets.Graph; time = :timestamp)` reads a static graph
   whose edges carry their times as edge data.
@@ -129,5 +130,3 @@ g = OrderedEdgeList(MovieLens("100k").graphs[1], ("user", "rating", "movie"))
 # 2,625 nodes (943 users and 1,682 movies), 100,000 ratings
 b = OrderedEdgeList(TemporalBrains()[1])             # 102 nodes, 27 snapshots
 ```
-
-`TemporalBrains` downloads 1.6 GB.

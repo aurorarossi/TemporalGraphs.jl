@@ -644,7 +644,7 @@ end
 
 """
     temporal_betweenness(g::OrderedEdgeList, criterion = MinimumHops(), ti = time_interval(g);
-                         β = Inf, count_type = Float64)
+                         β = Inf, count_type = nothing)
 
 Temporal betweenness of all nodes: for every node `u`, the sum over all pairs of
 nodes `s ≠ t` different from `u`, with `t` reachable from `s`, of the fraction of the
@@ -673,7 +673,7 @@ walks for every criterion except the shortest ones (`MinimumHops`, `ShortestFore
 `ShortestLatest`, `ShortestFastest`), and an `ArgumentError` is thrown. Prefix
 foremost betweenness requires positive transition times.
 
-The numbers of optimal walks are counted in `Float64`; if they
+By default (`count_type = nothing`) the numbers of optimal walks are counted in `Float64`; if they
 overflow (typical for foremost and fastest walks on large graphs, whose optimal
 walks are very numerous) the computation is repeated with `BigFloat`. Pass
 `count_type = BigFloat` to use it directly, or `count_type = Rational{BigInt}` to

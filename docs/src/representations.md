@@ -4,15 +4,16 @@ All representations are parametric in the node id type `V` and the time type `T`
 and store their data in a few contiguous vectors.
 
 | Type | Layout | Best for |
-|---|---|---|
+|:---|:---|:---|
 | [`OrderedEdgeList`](@ref) | edges sorted by time | distances, closeness, walk centralities, statistics |
 | [`IncidentLists`](@ref) | outgoing edges of each node, sorted by time (CSR) | paths, top-k closeness, clustering, overlap |
 | [`TRSGraph`](@ref) | time-respecting static DAG of time-nodes (CSR) | repeated reachability and fastest path queries |
-| [`DirectedLineGraph`](@ref) | edges as nodes (CSR) | betweenness |
+| [`DirectedLineGraph`](@ref) | edges as nodes (CSR) | edge betweenness |
 
 Convert between them with [`to_incident_lists`](@ref), [`to_ordered_edge_list`](@ref),
 [`to_trs_graph`](@ref) and [`to_directed_line_graph`](@ref). Distances work on the
-first three representations with the same functions:
+first three representations with the same functions (except the latest departure
+times, which are not implemented for `TRSGraph`):
 
 ```@example
 using TemporalGraphs # hide
@@ -71,16 +72,18 @@ static *snapshot graphs*, one per time step.
 
 - [`snapshots`](@ref) cuts the time interval into steps of length `resolution`. Each
   step becomes a Graphs.jl graph of the edges whose time stamp falls in it. By
-  default the step is the resolution of the time stamps, so every time stamp has its
-  own snapshot.
+  default the step is the *resolution of the time stamps*, the greatest common
+  divisor of `t - a` over all edges, where `a` is the start of the time interval, so
+  every time stamp has its own snapshot.
 - [`OrderedEdgeList`](@ref)`(graphs, times)` converts a sequence of snapshots back
   into a temporal graph. Undirected snapshots give both directions. With
   `transition_time = 1` and consecutive times the paths are strict, using at most
   one edge per snapshot; with `transition_time = 0` they are non-strict.
 - [`aggregate_time`](@ref) reduces the time resolution, for example from seconds to
   hours, by moving every edge to the start of its step.
-- [`static_graph`](@ref)`(g, ti)` returns the window graph of the edges in a time
-  window.
+- [`static_graph`](@ref)`(g, ti)` returns the unweighted static graph of the edges in
+  a time window, as a Graphs.jl `SimpleDiGraph` (`SimpleGraph` with
+  `directed = false`).
 
 ```@example
 using TemporalGraphs # hide
@@ -121,10 +124,11 @@ snapshot shufflings of [`randomize`](@ref)) use the same time steps.
 - [`normalize_graph`](@ref): remove identical edges (and self-loops).
 - [`make_undirected`](@ref): add the reverse of every edge.
 - [`scale_timestamps`](@ref), [`unit_transition_times`](@ref).
-- `reverse(g, ti)`: the temporal transpose, which turns paths from `u` to `w` into
-  paths from `w` to `u` with the same duration.
-- [`to_aggregated_edge_list`](@ref): the static graph with contact counts;
-  [`static_graph`](@ref) returns it as a Graphs.jl `SimpleDiGraph`.
+- [`reverse`](@ref Base.reverse(::OrderedEdgeList, ::Any))`(g, ti)`: the temporal
+  transpose, which turns paths from `u` to `w` into paths from `w` to `u` with the
+  same duration.
+- [`to_aggregated_edge_list`](@ref): the static graph with contact counts (see
+  [`static_graph`](@ref) above for the unweighted one).
 
 ## Graphs.jl
 
